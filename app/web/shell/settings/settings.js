@@ -94,7 +94,7 @@ const FIELDS = {
     },
     color: (f, s) => {
         const btn = el("button.btn.set-color", {type: "button", disabled: !f.enabled, "data-key": f.key,
-                                                onclick: e => Buddy.pickColor({hex: f.value, title: f.label, at: e.currentTarget,
+                                                onclick: e => Buddy.pickColor({hex: f.value, title: f.label, at: e.currentTarget.getBoundingClientRect(),
                                                                                onPick: hex => set(s, f.key, hex)})},
                        [el("i", {style: `background:${f.value}`}), el("span", {text: f.value})]);
         return labelled(f, btn);
