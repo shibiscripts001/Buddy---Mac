@@ -20,7 +20,7 @@ import sys
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication
 
-from core import resolve_bridge, startup_manager
+from core import gui_gc, resolve_bridge, startup_manager
 from core.shell_window import ShellWindow
 from core.single_instance import notify_existing_instance, SingleInstanceServer
 from registry import REGISTRY
@@ -36,6 +36,7 @@ def main(start_hidden=False):
     # QtWebEngine needs this set before the QApplication exists.
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
+    gui_gc.install(app)
     # The tray icon is the app's actual "still running" signal once the
     # window is closed/hidden - without this, Qt would quit the whole app
     # the moment the (now only) top-level window goes away, defeating the

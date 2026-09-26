@@ -147,12 +147,20 @@ class _Bridge(QObject):
     event = Signal(str, str)
 
     def __init__(self, page):
-        super().__init__()
-        self._page = page
+        # A Qt parent, so Qt deletes it with its window, and only a weak
+        # reference back: a strong one made a cycle (surface -> bridge ->
+        # surface) that left every closed window's web view for Python's
+        # cycle collector, which runs on whichever thread triggers it.
+        # Chromium aborts when a view is destroyed off the GUI thread - a
+        # crash every hour or two. See core/gui_gc.py.
+        super().__init__(page)
+        self._page = weakref.ref(page)
 
     @Slot()
     def ready(self):
-        self._page._js_ready()
+        page = self._page()
+        if page is not None:
+            page._js_ready()
 
     @Slot(str, str)
     def send(self, name, payload):
@@ -161,7 +169,8 @@ class _Bridge(QObject):
         except ValueError:
             data = None
         # Next turn of the event loop, never inside QWebChannel's handler.
-        QTimer.singleShot(0, lambda: self._page._dispatch(name, data))
+        page_ref = self._page
+        QTimer.singleShot(0, lambda: (page := page_ref()) is not None and page._dispatch(name, data))
 
 
 class _FileDropFilter(QObject):
@@ -171,7 +180,7 @@ class _FileDropFilter(QObject):
 
     def __init__(self, page):
         super().__init__(page)
-        self._page = page
+        self._page = weakref.ref(page)   # no cycle - see _Bridge
 
     @staticmethod
     def _paths(event):
@@ -181,21 +190,25 @@ class _FileDropFilter(QObject):
         return [u.toLocalFile() for u in mime.urls() if u.isLocalFile() and u.toLocalFile()]
 
     def eventFilter(self, obj, event):
+        page = self._page()
+        if page is None:
+            return False
         kind = event.type()
         if kind in (QEvent.DragEnter, QEvent.DragMove):
             if self._paths(event):
                 event.acceptProposedAction()
                 if kind == QEvent.DragEnter:
-                    self._page.emit("drop_hover", True)
+                    page.emit("drop_hover", True)
                 return True
         elif kind == QEvent.DragLeave:
-            self._page.emit("drop_hover", False)
+            page.emit("drop_hover", False)
         elif kind == QEvent.Drop:
             paths = self._paths(event)
             if paths:
                 event.acceptProposedAction()
-                self._page.emit("drop_hover", False)
-                QTimer.singleShot(0, lambda: self._page.on_files_dropped(paths))
+                page.emit("drop_hover", False)
+                page_ref = self._page
+                QTimer.singleShot(0, lambda: (page := page_ref()) is not None and page.on_files_dropped(paths))
                 return True
         return False
 
@@ -411,7 +424,7 @@ class WebWindow(_ReadyToShow, WebSurface, QWidget):
 
 
 class WebDialog(_ReadyToShow, WebSurface, QDialog):
-    """A modal window drawn by a web page - exec() it. host gives the theme
+    """A modal window drawn by a web page - exec() it, once. host gives the theme
     (the shell); parent is the window it sits over."""
 
     transparent = False
@@ -424,8 +437,14 @@ class WebDialog(_ReadyToShow, WebSurface, QDialog):
         self._build_web()
 
     def exec(self):
+        """Shows it modally, once: the dialog deletes itself afterwards
+        (read its results straight away). Otherwise every closed dialog -
+        a child of its window - stays alive, hidden, with its web view, until
+        that window goes."""
         self._wait_until_ready()
-        return super().exec()
+        result = super().exec()
+        self.deleteLater()
+        return result
 
 
 def _theme_host(widget):

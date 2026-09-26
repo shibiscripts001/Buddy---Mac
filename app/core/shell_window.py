@@ -1125,6 +1125,9 @@ class ShellWindow(QMainWindow):
                         else self.stack.currentWidget())
         dialog = SettingsDialog(self, self.shared_settings, self._on_settings_applied, current_page)
         dialog.exec()
+        # A child of this window: without this, every Settings ever opened
+        # stays behind, hidden, with a live web view, until Buddy quits.
+        dialog.deleteLater()
 
     def _on_settings_applied(self):
         self.apply_theme()
