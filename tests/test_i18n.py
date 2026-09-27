@@ -226,5 +226,58 @@ class PageTests(unittest.TestCase):
         self.assertEqual(self._js("document.getElementById('late').title"), TRANSLATIONS["Settings"]["日本語"])
 
 
+@unittest.skipUnless(HAVE_QT, "PySide6 not installed")
+class MacShortcutPageTests(unittest.TestCase):
+    """On macOS buddy.js respells shortcuts ("Ctrl+Z" -> "⌘Z") while the
+    strings are keyed by the Windows spelling: the Settings page, told it's
+    on a Mac before its scripts run, still translates them - in German,
+    whose own key names (Strg, Umschalt) are respelled too."""
+
+    _js, _until, _text = PageTests._js, PageTests._until, PageTests._text
+
+    def setUp(self):
+        from PySide6.QtWebEngineCore import QWebEngineScript
+        from core import web_page
+
+        self.app = QApplication.instance() or QApplication([])
+        mac = QWebEngineScript()
+        mac.setName("pretend-mac")
+        mac.setInjectionPoint(QWebEngineScript.DocumentCreation)
+        mac.setWorldId(QWebEngineScript.MainWorld)
+        mac.setSourceCode("Object.defineProperty(navigator, 'platform', {get: () => 'MacIntel'});")
+        scripts = web_page._shared_profile().scripts()
+        scripts.insert(mac)
+        self.addCleanup(scripts.remove, mac)
+        self.settings = _Settings(theme="Resolve", language="Deutsch")
+        for p in [mock.patch.object(shell_window, "SharedSettings", lambda: self.settings),
+                  mock.patch.object(shell_window, "resolve_connect", side_effect=RuntimeError("no Resolve")),
+                  mock.patch.object(shell_window.AnnouncementChecker, "start", lambda self: None),
+                  mock.patch.object(shell_window.QSystemTrayIcon, "isSystemTrayAvailable", return_value=False)]:
+            p.start()
+            self.addCleanup(p.stop)
+        self.addCleanup(setattr, i18n.get_i18n(), "language", "English")
+        self.win = shell_window.ShellWindow(self.app, [("Tools", _Page)])
+        self.addCleanup(self.win.deleteLater)
+        self.dialog = SettingsDialog(self.win, self.settings, lambda: None, self.win.pages["alpha"])
+        self.addCleanup(self.dialog.deleteLater)
+        self.addCleanup(self.dialog.close)
+        self.dialog.show()
+        self._until("document.querySelector('[data-section=language] select') !== null")
+        de = TRANSLATIONS["Appearance"]["Deutsch"]
+        self._until(f"[...document.querySelectorAll('h2')].some(h => h.textContent === {de!r})")
+
+    def test_a_respelled_shortcut_is_translated_and_respelled(self):
+        self.assertEqual(self._js("navigator.platform"), "MacIntel")
+        self._js("document.body.append(Buddy.el('p#undo', {}, [Buddy.keys('Undo (Ctrl+Z) - 3 steps')]),"
+                 " Buddy.el('p#redo', {title: Buddy.keys('Redo (Ctrl+Shift+Z)')}))")
+        self._until("document.getElementById('redo') !== null")
+        _wait(50)
+        self.assertEqual(self._text("#undo"), "Rückgängig (⌘Z) – 3 Schritte")          # not "Strg+Z"
+        self.assertEqual(self._js("document.getElementById('redo').title"), "Wiederholen (⇧⌘Z)")
+        self.dialog.on_set({"section": "language", "key": "language", "value": "English"})
+        self._until("[...document.querySelectorAll('h2')].some(h => h.textContent === 'Appearance')")
+        self.assertEqual(self._text("#undo"), "Undo (⌘Z) - 3 steps")                    # the Mac spelling back
+
+
 if __name__ == "__main__":
     unittest.main()

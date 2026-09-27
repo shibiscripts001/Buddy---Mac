@@ -1669,5 +1669,25 @@
   "中文": "{name} 已损坏，已保留为 {kept}。时间追踪已在没有它的情况下启动。",
   "العربية": "كان {name} تالفًا وتم الاحتفاظ به باسم {kept}. بدأ متتبع الوقت بدونه.",
   "Tiếng Việt": "{name} bị hỏng và đã được giữ lại dưới tên {kept}. Theo dõi thời gian đã khởi động mà không có tệp này."
+ },
+ "Global pause/resume shortcut ({shortcut})": {
+  "日本語": "一時停止/再開のグローバルショートカット ({shortcut})",
+  "Español": "Atajo global de pausa/reanudación ({shortcut})",
+  "Deutsch": "Globales Tastenkürzel für Pause/Fortsetzen ({shortcut})",
+  "Français": "Raccourci global pause/reprise ({shortcut})",
+  "한국어": "일시 정지/재개 전역 단축키({shortcut})",
+  "中文": "全局暂停/继续快捷键 ({shortcut})",
+  "العربية": "اختصار عام للإيقاف المؤقت/الاستئناف ({shortcut})",
+  "Tiếng Việt": "Phím tắt tạm dừng/tiếp tục toàn cục ({shortcut})"
+ },
+ "{shortcut} is already in use by another application – could not register the global pause/resume shortcut.": {
+  "日本語": "{shortcut} は既に別のアプリケーションで使われています – 一時停止/再開のグローバルショートカットを登録できませんでした。",
+  "Español": "Otra aplicación ya usa {shortcut}: no se pudo registrar el atajo global de pausa/reanudación.",
+  "Deutsch": "{shortcut} wird bereits von einer anderen Anwendung verwendet – das globale Tastenkürzel für Pause/Fortsetzen konnte nicht registriert werden.",
+  "Français": "{shortcut} est déjà utilisé par une autre application – impossible d'enregistrer le raccourci global pause/reprise.",
+  "한국어": "{shortcut}를 이미 다른 응용 프로그램에서 사용 중입니다 – 일시 정지/재개 전역 단축키를 등록할 수 없습니다.",
+  "中文": "{shortcut} 已被其他应用程序占用——无法注册全局暂停/继续快捷键。",
+  "العربية": "يستخدم تطبيق آخر {shortcut} بالفعل – تعذر تسجيل اختصار الإيقاف المؤقت/الاستئناف العام.",
+  "Tiếng Việt": "{shortcut} đã được ứng dụng khác sử dụng – không thể đăng ký phím tắt tạm dừng/tiếp tục toàn cục."
  }
 }

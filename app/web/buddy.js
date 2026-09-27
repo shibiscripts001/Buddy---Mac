@@ -124,9 +124,13 @@ const Buddy = (() => {
         }
 
         /* text in the chosen language, or text itself. */
+        /* On macOS a shortcut is respelled ("⌘Z") by the time it's drawn,
+           while the strings are keyed by the Windows spelling ("Ctrl+Z"): it's
+           looked up in that spelling, and the translation respelled back - in
+           its own language's key names too (see keys() below). */
         function t(text) {
             if (!exact || typeof text !== "string" || !text) return text;
-            const key = norm(text);
+            const key = norm(unkeys(text));
             if (!key || key.length > 4000 || !/\p{L}/u.test(key)) return text;
             let hit = exactHit(key);
             if (hit === undefined) {
@@ -143,7 +147,7 @@ const Buddy = (() => {
                 }
             }
             if (hit === undefined) return text;
-            return /^\s*/.exec(text)[0] + hit + /\s*$/.exec(text)[0];
+            return /^\s*/.exec(text)[0] + keys(hit) + /\s*$/.exec(text)[0];
         }
 
         function doText(node) {
@@ -840,10 +844,29 @@ const Buddy = (() => {
        Everywhere else Buddy.keys returns the text unchanged. */
     const IS_MAC = /Mac/.test(navigator.platform);
 
+    // Control and Shift as the translations write them - German Strg and
+    // Umschalt, Spanish Mayús, French Maj - so a translated shortcut is
+    // respelled like an English one ("Strg+Umschalt+Z" -> "⇧⌘Z").
+    const CTRL = "(?:Ctrl|Strg)";
+    const SHIFT = "(?:Shift|Umschalt|Mayús|Maj)";
+    const CTRL_SHIFT = new RegExp(`${CTRL}\\+${SHIFT}\\+`, "g");
+    const CTRL_ALT = new RegExp(`${CTRL}\\+Alt\\+`, "g");
+    const CTRL_PLUS = new RegExp(`${CTRL}\\+`, "g");
+    const CTRL_ALONE = new RegExp(`\\b${CTRL}\\b`, "g");
+
     function keys(text) {
-        if (!IS_MAC || typeof text !== "string" || !text.includes("Ctrl")) return text;
-        return text.replace(/Ctrl\+Shift\+/g, "⇧⌘").replace(/Ctrl\+Alt\+/g, "⌥⌘")
-                   .replace(/Ctrl\+/g, "⌘").replace(/\bCtrl\b/g, "⌘");
+        if (!IS_MAC || typeof text !== "string" || !/Ctrl|Strg/.test(text)) return text;
+        return text.replace(CTRL_SHIFT, "⇧⌘").replace(CTRL_ALT, "⌥⌘")
+                   .replace(CTRL_PLUS, "⌘").replace(CTRL_ALONE, "⌘");
+    }
+
+    /* keys() undone, back to the Windows spelling the translations are
+       keyed by: "⌘Z" -> "Ctrl+Z", a lone "⌘" -> "Ctrl". Buddy's shortcuts
+       are a capital letter or a digit after the modifiers. */
+    function unkeys(text) {
+        if (!IS_MAC || typeof text !== "string" || !text.includes("⌘")) return text;
+        return text.replace(/⇧⌘/g, "Ctrl+Shift+").replace(/⌥⌘/g, "Ctrl+Alt+")
+                   .replace(/⌘(?=[A-Z0-9])/g, "Ctrl+").replace(/⌘/g, "Ctrl");
     }
 
     function respellKeys(root) {
