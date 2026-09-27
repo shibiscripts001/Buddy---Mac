@@ -15,7 +15,7 @@ from PySide6.QtWidgets import QFileDialog
 
 from core import settings_form as sf
 
-from .i18n import LANGUAGES, tr
+from core.i18n import LANGUAGES, tr
 
 TRANSPARENCY_STEPS = ["100%", "95%", "90%", "85%", "80%", "75%"]
 TOGGLES = ("hide_on_dropper", "remember_export_folder", "focus_mode_enabled")

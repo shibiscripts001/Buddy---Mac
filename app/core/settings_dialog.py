@@ -75,12 +75,24 @@ class SettingsDialog(WebDialog):
 
     def sections(self):
         shell = shell_fields(self.shared_settings, self._autostart(), startup_manager.IS_WINDOWS)
+
+        # Extract the language field and the line before it to place them at the absolute bottom
+        lang_fields = []
+        if shell and shell[-1] and shell[-1].get("key") == "language":
+            lang_fields.insert(0, shell.pop())
+            if shell and shell[-1] and shell[-1].get("kind") == "line":
+                lang_fields.insert(0, shell.pop())
+
         out = [{"id": "shell", "title": "", "fields": [f for f in shell if f]}]
         page = self.active_page
         fields = page.settings_fields() if page is not None else None
         if fields:
             # Its own fields start with its heading.
             out.append({"id": "tool", "title": "", "fields": [f for f in fields if f]})
+
+        if lang_fields:
+            out.append({"id": "shell_bottom", "title": "", "fields": lang_fields})
+
         return out
 
     def push(self):

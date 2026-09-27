@@ -24,7 +24,7 @@ from PySide6.QtCore import Qt, Signal
 from core.web_page import WebWindow
 
 from . import view
-from .i18n import get_i18n, tr
+from core.i18n import get_i18n, tr
 
 BASE_WINDOW_FLAGS = Qt.Window | Qt.WindowTitleHint | Qt.WindowSystemMenuHint | Qt.WindowCloseButtonHint
 
