@@ -33,6 +33,13 @@ MEASURE = """(() => {
 })()"""
 
 
+ON_GITHUB = os.environ.get("BUDDY_NO_LIVE_GESTURES") == "1"   # set by .github/workflows/release.yml
+# GitHub's Mac build machines have no screen, and a gesture played there
+# in real time doesn't bounce the way it does on a Mac you can see - the
+# release build skips these; run them on a Mac (python3 -m unittest).
+NO_LIVE_GESTURES = "GitHub's headless Mac can't play trackpad gestures in real time"
+
+
 @unittest.skipUnless(HAVE_WEB, "PySide6 with QtWebEngine not installed")
 class HarmonyLayoutTests(unittest.TestCase):
     def setUp(self):
@@ -89,6 +96,7 @@ class HarmonyLayoutTests(unittest.TestCase):
             m = self.measure(width)
             self.assertLess(m["rightGap"], m["card"] * 0.12, f"dead space right of the swatches at {width}px: {m}")
 
+    @unittest.skipIf(ON_GITHUB, NO_LIVE_GESTURES)
     def test_the_page_bounces_though_it_all_fits(self):
         # The harmony screen fits in the window, so the page doesn't
         # overflow - a Mac scroll view bounces all the same (buddy.js).
@@ -102,6 +110,7 @@ class HarmonyLayoutTests(unittest.TestCase):
         self.assertEqual(stretch[0], "MAIN")
         self.assertGreater(stretch[1], 5)
 
+    @unittest.skipIf(ON_GITHUB, NO_LIVE_GESTURES)
     def test_scrolling_down_past_the_bottom_bounces(self):
         # Short enough that the page scrolls, and scrolled to its end: the
         # content must visibly move up, not just be told to.
@@ -118,6 +127,7 @@ class HarmonyLayoutTests(unittest.TestCase):
         self.assertNotEqual(moved, "fits", "the page should scroll at this height")
         self.assertLess(moved, -5)
 
+    @unittest.skipIf(ON_GITHUB, NO_LIVE_GESTURES)
     def test_extract_doesnt_shift_sideways_while_it_bounces(self):
         # Sized so Extract just fits: its bounce mustn't push the content past
         # the bottom, where a scrollbar would appear and move everything over.

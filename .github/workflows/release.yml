@@ -66,6 +66,10 @@ jobs:
         if: steps.exists.outputs.skip == 'false'
         env:
           QT_QPA_PLATFORM: offscreen
+          # This Mac has no screen: the overscroll-bounce tests, which play
+          # trackpad gestures in real time, don't bounce here and are skipped.
+          # They run on a Mac you can see (python3 -m unittest).
+          BUDDY_NO_LIVE_GESTURES: "1"
         run: |
           python -m pip install --disable-pip-version-check --progress-bar off -r installer/requirements.txt
           set +e

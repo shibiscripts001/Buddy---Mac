@@ -23,6 +23,12 @@ try:
 except ImportError:  # pragma: no cover
     HAVE_WEB = False
 
+ON_GITHUB = os.environ.get("BUDDY_NO_LIVE_GESTURES") == "1"   # set by .github/workflows/release.yml
+# GitHub's Mac build machines have no screen, and a gesture played there
+# in real time doesn't bounce the way it does on a Mac you can see - the
+# release build skips these; run them on a Mac (python3 -m unittest).
+NO_LIVE_GESTURES = "GitHub's headless Mac can't play trackpad gestures in real time"
+
 WEB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app", "web")
 
 PAGE = """<!doctype html><html data-family="resolve"><head><link rel="stylesheet" href="buddy.css"></head><body>
@@ -64,6 +70,7 @@ window.play = (id, deltas, extra) => {
 
 
 @unittest.skipUnless(HAVE_WEB and sys.platform == "darwin", "macOS with QtWebEngine only")
+@unittest.skipIf(ON_GITHUB, NO_LIVE_GESTURES)
 class BounceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
