@@ -50,8 +50,11 @@ The sidebar can be reordered and tools hidden from Settings.
 
 ## Installing
 
-**With the installer.** Build it with `python3 build_mac_installer.py`, which
-writes `dist/Buddy-<version>.pkg`, then open the .pkg. It installs Python from
+**With the installer.** Download `Buddy-<version>.pkg` from the
+[Releases](https://github.com/shibiscripts001/Buddy---Mac/releases) page (built
+by `.github/workflows/release.yml` whenever `VERSION` changes), or build it with
+`python3 build_mac_installer.py`, which writes `dist/Buddy-<version>.pkg`, then
+open the .pkg. It installs Python from
 python.org if the Mac has no suitable one (checksum-verified), adds Buddy's
 packages, and puts Buddy in Resolve's Scripts menu. The .pkg is unsigned, so
 macOS may ask you to allow it in System Settings > Privacy & Security. The

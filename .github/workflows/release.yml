@@ -1,12 +1,19 @@
-# Builds and publishes the Windows installer. Runs only when started by hand
-# (Actions > Release > Run workflow).
+# Builds and publishes the macOS installer, Buddy-<version>.pkg. Runs when
+# VERSION (or this file) changes on main, and by hand (Actions > Release >
+# Run workflow); a version that's already released is skipped, so bump
+# VERSION to release again.
 #
-# It builds from the repo alone on a clean Windows machine: build_installer.py
-# makes buddy.zip and compiles installer/Buddy.iss with Inno Setup.
+# It builds from the repo alone on a clean Mac: build_mac_installer.py makes
+# buddy.zip and the .pkg with pkgbuild/productbuild, which every macOS has.
 
 name: Release
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - VERSION
+      - .github/workflows/release.yml
   workflow_dispatch:
 
 permissions:
@@ -18,7 +25,7 @@ concurrency:
 
 jobs:
   release:
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,27 +36,26 @@ jobs:
 
       - name: Read VERSION
         id: version
-        shell: pwsh
         run: |
-          $v = (Get-Content VERSION -Raw).Trim()
-          if ($v -notmatch '^\d+\.\d+\.\d+$') { throw "VERSION must look like 1.2.3 (got '$v')" }
-          "version=$v" >> $env:GITHUB_OUTPUT
-          "Version $v"
+          v="$(tr -d '[:space:]' < VERSION)"
+          if ! [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "VERSION must look like 1.2.3 (got '$v')"
+            exit 1
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "Version $v"
 
       - name: Skip if this version is already released
         id: exists
-        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "v${{ steps.version.outputs.version }}" *> $null
-          if ($LASTEXITCODE -eq 0) {
-            "skip=true" >> $env:GITHUB_OUTPUT
-            "v${{ steps.version.outputs.version }} already exists - bump VERSION to release again."
-          } else {
-            "skip=false" >> $env:GITHUB_OUTPUT
-          }
-          exit 0
+          if gh release view "v${{ steps.version.outputs.version }}" > /dev/null 2>&1; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "v${{ steps.version.outputs.version }} already exists - bump VERSION to release again."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-python@v5
         if: steps.exists.outputs.skip == 'false'
@@ -58,41 +64,29 @@ jobs:
 
       - name: Run the tests
         if: steps.exists.outputs.skip == 'false'
-        shell: pwsh
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
-          python -m pip install --disable-pip-version-check --progress-bar off "PySide6>=6.8,<7" cryptography pillow
+          python -m pip install --disable-pip-version-check --progress-bar off -r installer/requirements.txt
           python tests/run_suite.py -v
-
-      - name: Install Inno Setup
-        if: steps.exists.outputs.skip == 'false'
-        shell: pwsh
-        run: |
-          $iscc = @("$env:ProgramFiles\Inno Setup 7\ISCC.exe", "${env:ProgramFiles(x86)}\Inno Setup 7\ISCC.exe",
-                    "$env:ProgramFiles\Inno Setup 6\ISCC.exe", "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe") |
-                  Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $iscc) { choco install innosetup -y --no-progress }
 
       - name: Build the installer
         if: steps.exists.outputs.skip == 'false'
-        shell: pwsh
-        run: python build_installer.py
+        run: python build_mac_installer.py
 
       - name: Publish the release
         if: steps.exists.outputs.skip == 'false'
-        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $v = "${{ steps.version.outputs.version }}"
-          $exe = "dist/BuddySetup-$v.exe"
-          $sha = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLower()
-          $notes = @"
-          **To install:** download BuddySetup-$v.exe below and double-click it. Then open DaVinci Resolve and choose Workspace > Scripts > Buddy.
+          v="${{ steps.version.outputs.version }}"
+          pkg="dist/Buddy-$v.pkg"
+          sha="$(shasum -a 256 "$pkg" | cut -d ' ' -f 1)"
+          cat > notes.md <<EOF
+          **To install:** download Buddy-$v.pkg below and open it. Then open DaVinci Resolve and choose Workspace > Scripts > Buddy.
 
-          Windows may say "Windows protected your PC" (the installer isn't code-signed): click More info > Run anyway. Only ever download it from this page.
+          The installer isn't signed, so macOS blocks it the first time: open System Settings > Privacy & Security and click Open Anyway. Only ever download it from this page. It installs Python and the packages Buddy needs if the Mac doesn't have them yet.
 
-          SHA-256 of BuddySetup-$v.exe: ``$sha`` - to check a download, run ``Get-FileHash BuddySetup-$v.exe`` in PowerShell and compare.
-          "@
-          gh release create "v$v" $exe --title "Buddy $v" --notes $notes --generate-notes --target $env:GITHUB_SHA
+          SHA-256 of Buddy-$v.pkg: \`$sha\` - to check a download, run \`shasum -a 256 Buddy-$v.pkg\` in Terminal and compare.
+          EOF
+          gh release create "v$v" "$pkg" --title "Buddy $v for macOS" --notes-file notes.md --generate-notes --target "$GITHUB_SHA"
