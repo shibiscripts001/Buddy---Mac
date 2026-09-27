@@ -205,7 +205,10 @@ def sweep_shell(theme, report):
     win.apply_theme()
     win.resize(*SHELL_SIZES[0])
     win.show()
-    wait(1500)
+    # A slow Mac (the release build's runner) can take longer than any fixed
+    # pause to load these pages, and a view checked before then is blank.
+    for chrome in ((win.taskbar,) if win._layout == "desktop" else (win.header, win.rail)):
+        wait_ready(chrome)
     for dual in (False, True):
         if win._layout == "desktop" and dual:
             continue
