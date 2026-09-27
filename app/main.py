@@ -21,6 +21,7 @@ from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication
 
 from core import gui_gc, resolve_bridge, startup_manager
+from core.i18n import tr
 from core.shell_window import ShellWindow
 from core.single_instance import notify_existing_instance, SingleInstanceServer
 from registry import REGISTRY
@@ -71,8 +72,8 @@ def main(start_hidden=False):
         window._update_tray_show_action()
         window.tray_icon.showMessage(
             "Buddy",
-            "Running in the background – Time Tracker will start tracking once you open a "
-            "project. Click the tray icon any time to view it.",
+            tr("Running in the background – Time Tracker will start tracking once you open a "
+               "project. Click the tray icon any time to view it."),
             window.tray_icon.MessageIcon.Information, 4000,
         )
     else:
