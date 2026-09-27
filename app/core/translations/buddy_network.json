@@ -1420,15 +1420,15 @@
   "العربية": "إذا وضعت كلمة مرور، فلا سبيل لفتح الملف دونها – لا يستطيع Buddy إعادة تعيينها.",
   "Tiếng Việt": "Nếu bạn đặt mật khẩu, không có cách nào mở tệp mà không có nó – Buddy không thể đặt lại."
  },
- "Kept while \"Keep a copy of my direct messages on this PC\" is on (Settings), locked to your Windows account. They stay after the server deletes them (after 30 days).": {
-  "日本語": "「ダイレクトメッセージのコピーをこのパソコンに保存する」(設定) がオンの間保存され、Windows アカウントで保護されます。サーバーが削除した後 (30 日後) も残ります。",
-  "Español": "Se conservan mientras \"Guardar una copia de mis mensajes directos en este equipo\" esté activado (Ajustes), bloqueados con tu cuenta de Windows. Se quedan después de que el servidor los elimine (a los 30 días).",
-  "Deutsch": "Gespeichert, solange „Eine Kopie meiner Direktnachrichten auf diesem PC behalten“ aktiviert ist (Einstellungen), gesperrt für Ihr Windows-Konto. Sie bleiben, nachdem der Server sie löscht (nach 30 Tagen).",
-  "Français": "Conservés tant que « Conserver une copie de mes messages directs sur ce PC » est activé (Paramètres), verrouillés sur votre compte Windows. Ils restent après leur suppression par le serveur (au bout de 30 jours).",
-  "한국어": "\"이 PC에 다이렉트 메시지 사본 보관\"(설정)이 켜져 있는 동안 보관되며, Windows 계정으로 잠깁니다. 서버가 삭제한 후(30일 후)에도 남습니다.",
-  "中文": "在“在本机保留我的私信副本”（设置）开启期间保存，并锁定到您的 Windows 账户。服务器删除后（30 天后）仍会保留。",
-  "العربية": "تُحفظ ما دام خيار \"الاحتفاظ بنسخة من رسائلي المباشرة على هذا الكمبيوتر\" مفعّلًا (الإعدادات)، مقفلة بحساب Windows الخاص بك. تبقى بعد أن يحذفها الخادم (بعد 30 يومًا).",
-  "Tiếng Việt": "Được lưu khi bật \"Giữ bản sao tin nhắn riêng trên máy này\" (Cài đặt), khóa theo tài khoản Windows của bạn. Chúng vẫn còn sau khi máy chủ xóa (sau 30 ngày)."
+ "Kept while \"Keep a copy of my direct messages on this PC\" is on (Settings), locked to your Mac user account. They stay after the server deletes them (after 30 days).": {
+  "日本語": "「ダイレクトメッセージのコピーをこのパソコンに保存する」(設定) がオンの間保存され、Mac のユーザアカウントで保護されます。サーバーが削除した後 (30 日後) も残ります。",
+  "Español": "Se conservan mientras \"Guardar una copia de mis mensajes directos en este equipo\" esté activado (Ajustes), bloqueados con tu cuenta de usuario del Mac. Se quedan después de que el servidor los elimine (a los 30 días).",
+  "Deutsch": "Gespeichert, solange „Eine Kopie meiner Direktnachrichten auf diesem PC behalten“ aktiviert ist (Einstellungen), gesperrt für Ihr Mac-Benutzerkonto. Sie bleiben, nachdem der Server sie löscht (nach 30 Tagen).",
+  "Français": "Conservés tant que « Conserver une copie de mes messages directs sur ce PC » est activé (Paramètres), verrouillés sur votre compte utilisateur Mac. Ils restent après leur suppression par le serveur (au bout de 30 jours).",
+  "한국어": "\"이 PC에 다이렉트 메시지 사본 보관\"(설정)이 켜져 있는 동안 보관되며, Mac 사용자 계정으로 잠깁니다. 서버가 삭제한 후(30일 후)에도 남습니다.",
+  "中文": "在“在本机保留我的私信副本”（设置）开启期间保存，并锁定到您的 Mac 用户账户。服务器删除后（30 天后）仍会保留。",
+  "العربية": "تُحفظ ما دام خيار \"الاحتفاظ بنسخة من رسائلي المباشرة على هذا الكمبيوتر\" مفعّلًا (الإعدادات)، مقفلة بحساب المستخدم الخاص بك على Mac. تبقى بعد أن يحذفها الخادم (بعد 30 يومًا).",
+  "Tiếng Việt": "Được lưu khi bật \"Giữ bản sao tin nhắn riêng trên máy này\" (Cài đặt), khóa theo tài khoản người dùng Mac của bạn. Chúng vẫn còn sau khi máy chủ xóa (sau 30 ngày)."
  },
  "Nothing saved on this PC.": {
   "日本語": "このパソコンには何も保存されていません。",
@@ -4170,15 +4170,15 @@
   "العربية": "تعذرت قراءة هويتك المحفوظة في شبكة Buddy، لذا ستُنشأ هوية جديدة. تم الاحتفاظ بالملف التالف بجانبها.",
   "Tiếng Việt": "Không thể đọc danh tính Mạng Buddy đã lưu, nên một danh tính mới sẽ được tạo. Tệp bị hỏng được giữ bên cạnh."
  },
- "Your saved Buddy Network identity was locked on another PC or Windows account, so it can't be used here – a new one will be made. Use a transfer file or your recovery code to bring an identity to this PC.": {
-  "日本語": "保存された Buddy ネットワークの ID は別のパソコンまたは Windows アカウントで保護されているため、ここでは使えません – 新しい ID が作られます。ID をこのパソコンに持ってくるには、移行ファイルか復旧コードを使ってください。",
-  "Español": "Tu identidad guardada de la Red de Buddy se bloqueó en otro equipo o cuenta de Windows, así que no se puede usar aquí: se creará una nueva. Usa un archivo de transferencia o tu código de recuperación para traer una identidad a este equipo.",
-  "Deutsch": "Ihre gespeicherte Buddy-Netzwerk-Identität wurde auf einem anderen PC oder Windows-Konto gesperrt und kann hier nicht verwendet werden – eine neue wird erstellt. Verwenden Sie eine Übertragungsdatei oder Ihren Wiederherstellungscode, um eine Identität auf diesen PC zu holen.",
-  "Français": "Votre identité Réseau Buddy enregistrée a été verrouillée sur un autre PC ou compte Windows, elle ne peut donc pas être utilisée ici – une nouvelle sera créée. Utilisez un fichier de transfert ou votre code de récupération pour amener une identité sur ce PC.",
-  "한국어": "저장된 Buddy 네트워크 신원이 다른 PC 또는 Windows 계정에서 잠겨 여기서 사용할 수 없습니다 – 새 신원을 만듭니다. 이 PC로 신원을 가져오려면 이전 파일이나 복구 코드를 사용하세요.",
-  "中文": "您保存的 Buddy 网络身份已锁定在另一台电脑或 Windows 账户上，无法在此使用——将创建新身份。请使用迁移文件或恢复码将身份带到本机。",
-  "العربية": "هويتك المحفوظة في شبكة Buddy مقفلة على كمبيوتر أو حساب Windows آخر، لذا لا يمكن استخدامها هنا – ستُنشأ هوية جديدة. استخدم ملف نقل أو رمز الاسترداد لنقل هوية إلى هذا الكمبيوتر.",
-  "Tiếng Việt": "Danh tính Mạng Buddy đã lưu bị khóa trên máy hoặc tài khoản Windows khác, nên không dùng được ở đây – một danh tính mới sẽ được tạo. Hãy dùng tệp chuyển hoặc mã khôi phục để đưa danh tính sang máy này."
+ "Your saved Buddy Network identity was locked on another PC or user account, so it can't be used here – a new one will be made. Use a transfer file or your recovery code to bring an identity to this PC.": {
+  "日本語": "保存された Buddy ネットワークの ID は別のパソコンまたはユーザアカウントで保護されているため、ここでは使えません – 新しい ID が作られます。ID をこのパソコンに持ってくるには、移行ファイルか復旧コードを使ってください。",
+  "Español": "Tu identidad guardada de la Red de Buddy se bloqueó en otro equipo o cuenta de usuario, así que no se puede usar aquí: se creará una nueva. Usa un archivo de transferencia o tu código de recuperación para traer una identidad a este equipo.",
+  "Deutsch": "Ihre gespeicherte Buddy-Netzwerk-Identität wurde auf einem anderen PC oder Benutzerkonto gesperrt und kann hier nicht verwendet werden – eine neue wird erstellt. Verwenden Sie eine Übertragungsdatei oder Ihren Wiederherstellungscode, um eine Identität auf diesen PC zu holen.",
+  "Français": "Votre identité Réseau Buddy enregistrée a été verrouillée sur un autre PC ou compte utilisateur, elle ne peut donc pas être utilisée ici – une nouvelle sera créée. Utilisez un fichier de transfert ou votre code de récupération pour amener une identité sur ce PC.",
+  "한국어": "저장된 Buddy 네트워크 신원이 다른 PC 또는 사용자 계정에서 잠겨 여기서 사용할 수 없습니다 – 새 신원을 만듭니다. 이 PC로 신원을 가져오려면 이전 파일이나 복구 코드를 사용하세요.",
+  "中文": "您保存的 Buddy 网络身份已锁定在另一台电脑或用户账户上，无法在此使用——将创建新身份。请使用迁移文件或恢复码将身份带到本机。",
+  "العربية": "هويتك المحفوظة في شبكة Buddy مقفلة على كمبيوتر أو حساب مستخدم آخر، لذا لا يمكن استخدامها هنا – ستُنشأ هوية جديدة. استخدم ملف نقل أو رمز الاسترداد لنقل هوية إلى هذا الكمبيوتر.",
+  "Tiếng Việt": "Danh tính Mạng Buddy đã lưu bị khóa trên máy hoặc tài khoản người dùng khác, nên không dùng được ở đây – một danh tính mới sẽ được tạo. Hãy dùng tệp chuyển hoặc mã khôi phục để đưa danh tính sang máy này."
  },
  "This PC's Buddy Network encryption keys couldn't be read, so new ones will be made – direct messages sent before now can't be read here.": {
   "日本語": "このパソコンの Buddy ネットワークの暗号化キーを読み込めなかったため、新しいキーが作られます – これまでに送られたダイレクトメッセージはここでは読めません。",
@@ -4330,15 +4330,15 @@
   "العربية": "الاحتفاظ بنسخة من رسائلي المباشرة على هذا الكمبيوتر",
   "Tiếng Việt": "Giữ bản sao tin nhắn riêng trên máy này"
  },
- "So they stay after the server deletes them (30 days), and after a PC change if you keep the files. Locked to your Windows account.": {
-  "日本語": "サーバーが削除した後 (30 日後) も、またファイルを残しておけばパソコンを替えた後も残ります。Windows アカウントで保護されます。",
-  "Español": "Para que se queden después de que el servidor los elimine (30 días) y tras cambiar de equipo si conservas los archivos. Bloqueados con tu cuenta de Windows.",
-  "Deutsch": "Damit sie erhalten bleiben, nachdem der Server sie löscht (30 Tage), und nach einem PC-Wechsel, wenn Sie die Dateien behalten. Gesperrt für Ihr Windows-Konto.",
-  "Français": "Pour qu'ils restent après leur suppression par le serveur (30 jours), et après un changement de PC si vous gardez les fichiers. Verrouillés sur votre compte Windows.",
-  "한국어": "서버가 삭제한 후(30일)에도, 파일을 보관하면 PC를 바꾼 후에도 남습니다. Windows 계정으로 잠깁니다.",
-  "中文": "这样服务器删除后（30 天）它们仍会保留；如果您保留这些文件，换电脑后也会保留。锁定到您的 Windows 账户。",
-  "العربية": "حتى تبقى بعد أن يحذفها الخادم (30 يومًا)، وبعد تغيير الكمبيوتر إذا احتفظت بالملفات. مقفلة بحساب Windows الخاص بك.",
-  "Tiếng Việt": "Để chúng còn lại sau khi máy chủ xóa (30 ngày), và sau khi đổi máy nếu bạn giữ các tệp. Khóa theo tài khoản Windows của bạn."
+ "So they stay after the server deletes them (30 days), and after a PC change if you keep the files. Locked to your Mac user account.": {
+  "日本語": "サーバーが削除した後 (30 日後) も、またファイルを残しておけばパソコンを替えた後も残ります。Mac のユーザアカウントで保護されます。",
+  "Español": "Para que se queden después de que el servidor los elimine (30 días) y tras cambiar de equipo si conservas los archivos. Bloqueados con tu cuenta de usuario del Mac.",
+  "Deutsch": "Damit sie erhalten bleiben, nachdem der Server sie löscht (30 Tage), und nach einem PC-Wechsel, wenn Sie die Dateien behalten. Gesperrt für Ihr Mac-Benutzerkonto.",
+  "Français": "Pour qu'ils restent après leur suppression par le serveur (30 jours), et après un changement de PC si vous gardez les fichiers. Verrouillés sur votre compte utilisateur Mac.",
+  "한국어": "서버가 삭제한 후(30일)에도, 파일을 보관하면 PC를 바꾼 후에도 남습니다. Mac 사용자 계정으로 잠깁니다.",
+  "中文": "这样服务器删除后（30 天）它们仍会保留；如果您保留这些文件，换电脑后也会保留。锁定到您的 Mac 用户账户。",
+  "العربية": "حتى تبقى بعد أن يحذفها الخادم (30 يومًا)، وبعد تغيير الكمبيوتر إذا احتفظت بالملفات. مقفلة بحساب المستخدم الخاص بك على Mac.",
+  "Tiếng Việt": "Để chúng còn lại sau khi máy chủ xóa (30 ngày), và sau khi đổi máy nếu bạn giữ các tệp. Khóa theo tài khoản người dùng Mac của bạn."
  },
  "Also delete the direct messages already saved on this PC?\n\nIf you keep them, you can still export or delete them under Saved chats.": {
   "日本語": "このパソコンに既に保存されているダイレクトメッセージも削除しますか?\n\n残しておけば、「保存したチャット」で書き出しや削除ができます。",

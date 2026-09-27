@@ -73,7 +73,7 @@ def main(start_hidden=False):
         window.tray_icon.showMessage(
             "Buddy",
             tr("Running in the background – Time Tracker will start tracking once you open a "
-               "project. Click the tray icon any time to view it."),
+               "project. Click Buddy's icon in the menu bar any time to view it."),
             window.tray_icon.MessageIcon.Information, 4000,
         )
     else:

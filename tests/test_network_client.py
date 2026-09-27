@@ -11,7 +11,7 @@ import unittest
 
 import _paths
 from core import nav_layout
-from pages.buddy_network import render, safety
+from pages.buddy_network import e2e, render, safety
 from pages.buddy_network.identity import IdentityStore
 from server import core as server_core
 
@@ -193,8 +193,8 @@ class IdentityTests(unittest.TestCase):
             with open(path) as f:
                 entry = json.load(f)["servers"]["wss://a"]
             self.assertEqual((entry["id"], "token" in entry), ("abc", False))
-            if os.name == "nt":
-                self.assertEqual(entry["protection"], "dpapi")
+            if e2e.lock_method() != "none":
+                self.assertEqual(entry["protection"], e2e.lock_method())
                 entry["token_locked"] = entry["token_locked"][:-8] + "AAAAAAA="   # locked somewhere else
                 with open(path, "w") as f:
                     json.dump({"servers": {"wss://a": entry}}, f)

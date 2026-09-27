@@ -6,10 +6,13 @@ checks come from server/core.py, so the two can't drift apart."""
 
 import json
 import os
+import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import _paths  # noqa: F401
+import fake_keychain
 from pages.buddy_network import archive, e2e, export, render, transfer
 from server import common as server_common
 from server import core as server_core
@@ -77,13 +80,95 @@ class EncryptionTests(unittest.TestCase):
         self.assertEqual(e2e.keys_by_device([key.public_b64, "junk", e2e.b64(b"short")]),
                          {key.id: key.public})
 
-    def test_windows_lock_round_trips(self):
+    def test_the_lock_round_trips(self):
         how, locked = e2e.protect(b"secret key bytes")
+        self.assertEqual(how, e2e.lock_method())
         self.assertEqual(e2e.unprotect(how, locked), b"secret key bytes")
-        if how == "dpapi":
+        if how != "none":
             self.assertNotIn(b"secret", e2e.unb64(locked))
         with self.assertRaises(e2e.CryptoError):
             e2e.unprotect("dpapi", e2e.b64(b"not a dpapi blob"))
+        with self.assertRaises(e2e.CryptoError):
+            e2e.unprotect("keychain", e2e.b64(b"not a keychain blob, long enough to try"))
+
+
+@unittest.skipUnless(e2e.lock_method() == "keychain", "the Mac's lock")
+class KeychainLockTests(unittest.TestCase):
+    """On a Mac: locked with a key in the login Keychain (fake_keychain
+    stands in for it)."""
+
+    def setUp(self):
+        fake_keychain.KEYCHAIN.forget()
+
+    def test_one_key_is_made_then_reused(self):
+        first = e2e.protect(b"one")
+        e2e._keychain_cache = None   # a later run of Buddy
+        second = e2e.protect(b"two")
+        self.assertEqual(len(fake_keychain.KEYCHAIN.items), 1)
+        self.assertEqual(e2e.unprotect(*first), b"one")
+        self.assertEqual(e2e.unprotect(*second), b"two")
+        self.assertNotEqual(first[1], e2e.protect(b"one")[1])   # a fresh nonce each time
+
+    def test_another_mac_user_account_cant_open_it(self):
+        how, locked = e2e.protect(b"secret")
+        fake_keychain.KEYCHAIN.forget()
+        with self.assertRaises(e2e.CryptoError):
+            e2e.unprotect(how, locked)
+        self.assertEqual(fake_keychain.KEYCHAIN.items, {})   # opening never makes a key
+        e2e.protect(b"new")                                  # locking does - a different one
+        with self.assertRaises(e2e.CryptoError):
+            e2e.unprotect(how, locked)
+
+    def test_a_keychain_that_fails_is_an_error_not_an_unlocked_file(self):
+        failing = lambda *args: subprocess.CompletedProcess(args, 51, "", "User interaction is not allowed.")
+        with mock.patch.object(e2e, "_security", failing):
+            with self.assertRaises(e2e.CryptoError):
+                e2e.protect(b"secret")
+
+    def test_a_key_another_buddy_made_first_is_used(self):
+        real = fake_keychain.KEYCHAIN
+
+        def racing(*args):
+            if args[0] == "add-generic-password":   # made by another Buddy a moment ago
+                real("add-generic-password", "-s", e2e.KEYCHAIN_SERVICE, "-a", e2e.KEYCHAIN_ACCOUNT,
+                     "-w", e2e.b64(bytes(range(32))))
+            return real(*args)
+
+        with mock.patch.object(e2e, "_security", racing):
+            how, locked = e2e.protect(b"secret")
+        self.assertEqual(e2e._keychain_cache, bytes(range(32)))
+        self.assertEqual(e2e.unprotect(how, locked), b"secret")
+
+    def test_files_an_older_buddy_saved_unlocked_are_locked_when_read(self):
+        with tempfile.TemporaryDirectory() as folder:
+            key = e2e.DeviceKey.generate()
+            old = e2e.DeviceKey.generate()
+            plain = lambda k: {"protection": "none", "private": e2e.b64(k.private_bytes()), "public": k.public_b64}
+            with open(os.path.join(folder, e2e.KEYS_FILENAME), "w", encoding="utf-8") as f:
+                json.dump({"servers": {URL: {"device": plain(key), "retired": [plain(old)]}}}, f)
+            store = e2e.KeyStore(folder)
+            self.assertEqual([k.id for k in store.readers(URL)], [key.id, old.id])
+            with open(os.path.join(folder, e2e.KEYS_FILENAME), encoding="utf-8") as f:
+                raw = f.read()
+            entry = json.loads(raw)["servers"][URL]
+            self.assertEqual({entry["device"]["protection"], entry["retired"][0]["protection"]}, {"keychain"})
+            self.assertNotIn(e2e.b64(key.private_bytes()), raw)
+            self.assertNotIn(e2e.b64(old.private_bytes()), raw)
+            self.assertEqual([k.id for k in e2e.KeyStore(folder).readers(URL)], [key.id, old.id])
+
+            chats = os.path.join(folder, archive.FOLDER)
+            saved = archive.ChatArchive(chats)
+            other = {"id": "bbbb", "tag": "bbbb", "name": "Bo", "role": "user"}
+            with mock.patch.object(e2e, "lock_method", lambda: "none"):   # as an older Buddy saved it
+                saved.save(URL, "aaaa", ROOM, other, [dm(1, "kept secret")])
+            [name] = os.listdir(chats)
+            self.assertEqual([m["text"] for m in archive.ChatArchive(chats).messages(URL, "aaaa", ROOM)],
+                             ["kept secret"])
+            with open(os.path.join(chats, name), encoding="utf-8") as f:
+                outer = json.load(f)
+            self.assertEqual(outer["protection"], "keychain")
+            self.assertEqual([m["text"] for m in archive.ChatArchive(chats).messages(URL, "aaaa", ROOM)],
+                             ["kept secret"])
 
 
 URL = "wss://chat.example.com"
@@ -104,7 +189,8 @@ class KeyStoreTests(unittest.TestCase):
         self.assertNotEqual(e2e.KeyStore(self.folder).device("ws://localhost:8765").id, key.id)
         with open(os.path.join(self.folder, e2e.KEYS_FILENAME), encoding="utf-8") as f:
             saved = json.load(f)["servers"][URL]["device"]
-        if saved["protection"] == "dpapi":
+        self.assertEqual(saved["protection"], e2e.lock_method())
+        if saved["protection"] != "none":
             self.assertNotIn(e2e.b64(key.private_bytes()), json.dumps(saved))
 
     def test_a_key_that_cant_be_unlocked_is_replaced_with_a_warning(self):
@@ -178,7 +264,7 @@ class ArchiveTests(unittest.TestCase):
         self.assertNotIn(ROOM, " ".join(files))                  # the names don't say who
         with open(os.path.join(self.folder, files[0]), encoding="utf-8") as f:
             raw = f.read()
-        if '"dpapi"' in raw:
+        if e2e.lock_method() != "none":
             self.assertNotIn("second", raw)
         [chat] = again.conversations(URL)
         self.assertEqual((chat["room"], chat["count"], chat["other"]["name"]), (ROOM, 2, "Bo"))

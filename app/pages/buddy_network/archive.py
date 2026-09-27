@@ -6,8 +6,8 @@ The server forgets messages after 30 days, and an encrypted DM can only be
 read on a PC it was encrypted for; this copy keeps what this PC has read,
 so it's still here after both. One file per conversation in
 ~/.buddy_network/saved_chats/, named by a hash (so the folder doesn't list
-who you talk to) and locked to this Windows account with DPAPI, like the
-encryption key (e2e.protect). Written with core/atomic_io.
+who you talk to) and locked to this user account (DPAPI on Windows, the
+Keychain on a Mac), like the encryption key (e2e.protect). Written with core/atomic_io.
 
 A message deleted by its sender is deleted here too - "delete for
 everyone" means this copy as well.
@@ -59,10 +59,15 @@ class ChatArchive:
                 return None
             data = json.loads(e2e.unprotect(outer.get("protection", ""), outer.get("data", "")).decode("utf-8"))
         except (atomic_io.CorruptFileError, e2e.CryptoError, ValueError, AttributeError, OSError):
-            return None   # another Windows account's, or damaged: left alone
+            return None   # another user account's, or damaged: left alone
         if not isinstance(data, dict) or not isinstance(data.get("messages"), dict):
             return None
         self._cache[path] = data
+        if outer.get("protection") != e2e.lock_method():   # saved unlocked (an older Buddy for Mac)
+            try:
+                self._write(path, data)
+            except (e2e.CryptoError, OSError):
+                pass   # stays as it was; locked on the next save
         return data
 
     def _write(self, path: str, data: dict):
@@ -169,7 +174,7 @@ class ChatArchive:
         return [dict(m, author=dict(m["author"])) for m in sorted(data["messages"].values(), key=lambda m: m["id"])]
 
     def conversations(self, url: str) -> list[dict]:
-        """Every conversation saved for that server that this Windows
+        """Every conversation saved for that server that this user
         account can open: {"me", "room", "other", "count", "last"}, the most
         recent first."""
         try:

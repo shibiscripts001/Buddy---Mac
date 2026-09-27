@@ -580,25 +580,25 @@
   "العربية": "لا يزال قيد التشغيل",
   "Tiếng Việt": "Vẫn đang chạy"
  },
- "Buddy is still running in the background. Right-click the tray icon to reopen or quit.": {
-  "日本語": "Buddy はバックグラウンドで実行中です。トレイアイコンを右クリックすると、再び開くか終了できます。",
-  "Español": "Buddy sigue ejecutándose en segundo plano. Haz clic derecho en el icono de la bandeja para volver a abrirlo o salir.",
-  "Deutsch": "Buddy läuft im Hintergrund weiter. Klicken Sie mit der rechten Maustaste auf das Taskleistensymbol, um es wieder zu öffnen oder zu beenden.",
-  "Français": "Buddy continue de s'exécuter en arrière-plan. Faites un clic droit sur l'icône de la zone de notification pour le rouvrir ou le quitter.",
-  "한국어": "Buddy가 백그라운드에서 계속 실행 중입니다. 트레이 아이콘을 마우스 오른쪽 버튼으로 클릭하면 다시 열거나 종료할 수 있습니다.",
-  "中文": "Buddy 仍在后台运行。右键点击托盘图标可重新打开或退出。",
-  "العربية": "لا يزال Buddy يعمل في الخلفية. انقر بزر الماوس الأيمن على أيقونة شريط النظام لإعادة فتحه أو إنهائه.",
-  "Tiếng Việt": "Buddy vẫn đang chạy ở chế độ nền. Bấm chuột phải vào biểu tượng khay hệ thống để mở lại hoặc thoát."
+ "Buddy is still running in the background. Click Buddy's icon in the menu bar to reopen or quit.": {
+  "日本語": "Buddy はバックグラウンドで実行中です。メニューバーの Buddy アイコンをクリックすると、再び開くか終了できます。",
+  "Español": "Buddy sigue ejecutándose en segundo plano. Haz clic en el icono de Buddy en la barra de menús para volver a abrirlo o salir.",
+  "Deutsch": "Buddy läuft im Hintergrund weiter. Klicken Sie auf das Buddy-Symbol in der Menüleiste, um es wieder zu öffnen oder zu beenden.",
+  "Français": "Buddy continue de s'exécuter en arrière-plan. Cliquez sur l'icône de Buddy dans la barre des menus pour le rouvrir ou le quitter.",
+  "한국어": "Buddy가 백그라운드에서 계속 실행 중입니다. 메뉴 막대의 Buddy 아이콘을 클릭하면 다시 열거나 종료할 수 있습니다.",
+  "中文": "Buddy 仍在后台运行。点击菜单栏中的 Buddy 图标可重新打开或退出。",
+  "العربية": "لا يزال Buddy يعمل في الخلفية. انقر على أيقونة Buddy في شريط القائمة لإعادة فتحه أو إنهائه.",
+  "Tiếng Việt": "Buddy vẫn đang chạy ở chế độ nền. Bấm vào biểu tượng Buddy trên thanh menu để mở lại hoặc thoát."
  },
- "Running in the background – Time Tracker will start tracking once you open a project. Click the tray icon any time to view it.": {
-  "日本語": "バックグラウンドで実行中です – プロジェクトを開くとタイムトラッカーが記録を始めます。トレイアイコンをクリックすればいつでも表示できます。",
-  "Español": "Ejecutándose en segundo plano: Control de tiempo empezará a registrar en cuanto abras un proyecto. Haz clic en el icono de la bandeja cuando quieras verlo.",
-  "Deutsch": "Läuft im Hintergrund – die Zeiterfassung beginnt, sobald Sie ein Projekt öffnen. Klicken Sie jederzeit auf das Taskleistensymbol, um sie anzuzeigen.",
-  "Français": "Exécution en arrière-plan – le Suivi du temps commencera dès que vous ouvrirez un projet. Cliquez sur l'icône de la zone de notification à tout moment pour l'afficher.",
-  "한국어": "백그라운드에서 실행 중입니다 – 프로젝트를 열면 시간 추적기가 기록을 시작합니다. 언제든지 트레이 아이콘을 클릭해 확인할 수 있습니다.",
-  "中文": "正在后台运行——打开项目后，时间追踪将开始记录。随时点击托盘图标即可查看。",
-  "العربية": "يعمل في الخلفية – سيبدأ متتبع الوقت بالتتبع بمجرد فتح مشروع. انقر على أيقونة شريط النظام في أي وقت لعرضه.",
-  "Tiếng Việt": "Đang chạy ở chế độ nền – Theo dõi thời gian sẽ bắt đầu ghi khi bạn mở một dự án. Bấm vào biểu tượng khay bất cứ lúc nào để xem."
+ "Running in the background – Time Tracker will start tracking once you open a project. Click Buddy's icon in the menu bar any time to view it.": {
+  "日本語": "バックグラウンドで実行中です – プロジェクトを開くとタイムトラッカーが記録を始めます。メニューバーの Buddy アイコンをクリックすればいつでも表示できます。",
+  "Español": "Ejecutándose en segundo plano: Control de tiempo empezará a registrar en cuanto abras un proyecto. Haz clic en el icono de Buddy en la barra de menús cuando quieras verlo.",
+  "Deutsch": "Läuft im Hintergrund – die Zeiterfassung beginnt, sobald Sie ein Projekt öffnen. Klicken Sie jederzeit auf das Buddy-Symbol in der Menüleiste, um sie anzuzeigen.",
+  "Français": "Exécution en arrière-plan – le Suivi du temps commencera dès que vous ouvrirez un projet. Cliquez sur l'icône de Buddy dans la barre des menus à tout moment pour l'afficher.",
+  "한국어": "백그라운드에서 실행 중입니다 – 프로젝트를 열면 시간 추적기가 기록을 시작합니다. 언제든지 메뉴 막대의 Buddy 아이콘을 클릭해 확인할 수 있습니다.",
+  "中文": "正在后台运行——打开项目后，时间追踪将开始记录。随时点击菜单栏中的 Buddy 图标即可查看。",
+  "العربية": "يعمل في الخلفية – سيبدأ متتبع الوقت بالتتبع بمجرد فتح مشروع. انقر على أيقونة Buddy في شريط القائمة في أي وقت لعرضه.",
+  "Tiếng Việt": "Đang chạy ở chế độ nền – Theo dõi thời gian sẽ bắt đầu ghi khi bạn mở một dự án. Bấm vào biểu tượng Buddy trên thanh menu bất cứ lúc nào để xem."
  },
  "Connection failed": {
   "日本語": "接続に失敗しました",

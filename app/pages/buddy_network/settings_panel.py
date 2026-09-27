@@ -20,7 +20,7 @@ class NetworkSettingsMixin:
                      self.settings.get("notify_dms", True)),
             sf.check("keep_dms", "Keep a copy of my direct messages on this PC", self.settings.get("keep_dms"),
                      hint_text="So they stay after the server deletes them (30 days), and after a PC change if you "
-                               "keep the files. Locked to your Windows account."),
+                               "keep the files. Locked to your Mac user account."),
             sf.buttons(("Saved chats…", "saved_chats")),
         ]
 

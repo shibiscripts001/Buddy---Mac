@@ -744,7 +744,7 @@ const PANELS = {
         const list = el("div.plist"), note = el("p.saved-note");
         return {
             title: "Direct messages saved on this PC", wide: true,
-            body: [el("p.note", {text: "Kept while \"Keep a copy of my direct messages on this PC\" is on (Settings), locked to your Windows account. They stay after the server deletes them (after 30 days)."}),
+            body: [el("p.note", {text: "Kept while \"Keep a copy of my direct messages on this PC\" is on (Settings), locked to your Mac user account. They stay after the server deletes them (after 30 days)."}),
                    list, note],
             buttons: [{label: "Close"}],
             update(d) {

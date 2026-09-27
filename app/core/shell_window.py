@@ -563,8 +563,8 @@ class ShellWindow(QMainWindow):
             if not self.shared_settings.get("_tray_notice_shown", False):
                 self.tray_icon.showMessage(
                     tr("Still running"),
-                    tr("Buddy is still running in the background. Right-click the tray icon to "
-                       "reopen or quit."),
+                    tr("Buddy is still running in the background. Click Buddy's icon in the menu bar "
+                       "to reopen or quit."),
                     QSystemTrayIcon.Information, 5000,
                 )
                 self.shared_settings["_tray_notice_shown"] = True

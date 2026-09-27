@@ -22,3 +22,9 @@ TRANSCRIBE = APP / "pages" / "transcribe"
 for p in (str(APP), str(TRANSCRIBE), str(APP.parent)):
     if p not in sys.path:
         sys.path.insert(0, p)
+
+# No test touches the real login Keychain, where Buddy Network keeps the key
+# that locks its files on a Mac (e2e.py): they all get an in-memory one.
+import fake_keychain  # noqa: E402
+
+fake_keychain.install()

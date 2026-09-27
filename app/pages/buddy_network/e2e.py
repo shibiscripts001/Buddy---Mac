@@ -2,8 +2,8 @@
 
 Each PC has its own key pair (X25519), made the first time Buddy Network
 connects and kept in keys.json next to the identity, with the private half
-locked to this Windows account (DPAPI - a copy of the file is no use
-anywhere else). Only the public half goes to the server, which hands it to
+locked to this user account - DPAPI on Windows, a key in the login Keychain
+on a Mac (protect()) - so a copy of the file is no use anywhere else. Only the public half goes to the server, which hands it to
 the user's buddies in their buddy list.
 
 Sending a DM (encrypt):
@@ -41,6 +41,7 @@ import ctypes
 import hashlib
 import json
 import os
+import subprocess
 import sys
 
 from core import atomic_io
@@ -278,29 +279,109 @@ def _dpapi(data: bytes, protect: bool) -> bytes:
         kernel32.LocalFree(blob_out.pbData)
 
 
+# --------------------------------------------------------------- Keychain
+# The Mac's DPAPI: a random 32-byte key kept in the login Keychain, which
+# locks each file (ChaCha20-Poly1305, a random nonce each time). Made the
+# first time something is locked; a Mac user account that doesn't have it
+# (another Mac, the file copied, the Keychain reset) can't open the files.
+# Through /usr/bin/security, so the Keychain item belongs to that tool and
+# never asks whichever Python Buddy runs on for permission.
+
+KEYCHAIN_SERVICE = "Buddy Network"
+KEYCHAIN_ACCOUNT = "saved-file lock"
+_SECURITY = "/usr/bin/security"
+_NOT_FOUND, _DUPLICATE = 44, 45   # security's exit codes
+_keychain_cache: bytes | None = None
+
+
+def _security(*args: str) -> subprocess.CompletedProcess:
+    try:
+        return subprocess.run([_SECURITY, *args], capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise CryptoError(f"The Keychain couldn't be reached ({exc}).") from exc
+
+
+def _keychain_key(create: bool) -> bytes:
+    """The lock key from the login Keychain; made there first if create."""
+    global _keychain_cache
+    if _keychain_cache is not None:
+        return _keychain_cache
+    for _ in range(2):
+        found = _security("find-generic-password", "-s", KEYCHAIN_SERVICE, "-a", KEYCHAIN_ACCOUNT, "-w")
+        if found.returncode == 0:
+            key = unb64(found.stdout.strip(), 32)
+            if key is None:
+                raise CryptoError("Buddy Network's key in the Keychain isn't readable.")
+            _keychain_cache = key
+            return key
+        if found.returncode != _NOT_FOUND:
+            raise CryptoError(f"The Keychain couldn't be read ({found.stderr.strip() or found.returncode}).")
+        if not create:
+            raise CryptoError("The file was locked by another Mac user account.")
+        made = _security("add-generic-password", "-s", KEYCHAIN_SERVICE, "-a", KEYCHAIN_ACCOUNT,
+                         "-l", KEYCHAIN_SERVICE, "-j", "Locks Buddy Network's saved keys and messages.",
+                         "-w", b64(os.urandom(32)))
+        if made.returncode not in (0, _DUPLICATE):   # a duplicate: another Buddy made it first
+            raise CryptoError(f"The Keychain couldn't save a key ({made.stderr.strip() or made.returncode}).")
+    raise CryptoError("The Keychain didn't keep Buddy Network's key.")
+
+
+_KEYCHAIN_AD = b"Buddy Network saved file"
+
+
+def _keychain_lock(data: bytes) -> bytes:
+    if not AVAILABLE:
+        raise CryptoError("Locking needs the cryptography package.")
+    nonce = os.urandom(12)
+    return nonce + ChaCha20Poly1305(_keychain_key(create=True)).encrypt(nonce, data, _KEYCHAIN_AD)
+
+
+def _keychain_unlock(blob: bytes) -> bytes:
+    if not AVAILABLE:
+        raise CryptoError("Unlocking needs the cryptography package.")
+    if len(blob) < 12 + 16:
+        raise CryptoError("The saved file isn't readable.")
+    try:
+        return ChaCha20Poly1305(_keychain_key(create=False)).decrypt(blob[:12], blob[12:], _KEYCHAIN_AD)
+    except InvalidTag:
+        raise CryptoError("The file was locked by another Mac user account.") from None
+
+
+def lock_method() -> str:
+    """How protect() locks on this computer: "dpapi" (Windows), "keychain"
+    (Mac) or "none" (anywhere else - a developer's Linux box)."""
+    return {"win32": "dpapi", "darwin": "keychain"}.get(sys.platform, "none")
+
+
 def protect(data: bytes) -> tuple[str, str]:
-    """(how, base64): locked to this Windows account where there's DPAPI."""
-    if sys.platform == "win32":
-        return "dpapi", b64(_dpapi(data, True))
-    return "none", b64(data)   # not Windows (a developer's machine): no lock available
+    """(how, base64): locked to this Windows account (DPAPI) or this Mac
+    user account (the Keychain)."""
+    how = lock_method()
+    if how == "dpapi":
+        return how, b64(_dpapi(data, True))
+    if how == "keychain":
+        return how, b64(_keychain_lock(data))
+    return "none", b64(data)
 
 
 def unprotect(how: str, text: str) -> bytes:
+    """protect() undone. Files saved unlocked (by an older Buddy for Mac)
+    still open; callers lock them again when how != lock_method()."""
     data = unb64(text)
-    if data is None or how not in ("dpapi", "none"):
+    if data is None or how not in ("dpapi", "keychain", "none"):
         raise CryptoError("The saved key isn't readable.")
     if how == "none":
         return data
-    if sys.platform != "win32":
-        raise CryptoError("The saved key was locked by Windows.")
-    return _dpapi(data, False)
+    if how != lock_method():
+        raise CryptoError("The saved key was locked by " + ("Windows." if how == "dpapi" else "a Mac."))
+    return _dpapi(data, False) if how == "dpapi" else _keychain_unlock(data)
 
 
 # --------------------------------------------------------------- KeyStore
 
 class KeyStore:
     """keys.json: for each server address, this PC's key (private half
-    locked with DPAPI), older keys it had ("retired" - after a transfer
+    locked with protect()), older keys it had ("retired" - after a transfer
     brought another in, transfer.py - kept for reading old DMs) and what's
     known about each person's keys:
 
@@ -346,8 +427,9 @@ class KeyStore:
 
     def device(self, url: str) -> DeviceKey:
         """This PC's key for that server, made (and saved) the first time.
-        A key that can't be unlocked - Windows reinstalled, the file copied
-        from another PC - is replaced, with a warning."""
+        A key that can't be unlocked - Windows reinstalled, the Keychain
+        reset, the file copied from another PC - is replaced, with a
+        warning."""
         if url in self._devices:
             return self._devices[url]
         entry = self._server(url)
@@ -359,12 +441,25 @@ class KeyStore:
             except (CryptoError, ValueError):
                 self.warnings.append("This PC's Buddy Network encryption key couldn't be unlocked, so a new "
                                      "one was made – direct messages sent before now can't be read here.")
+            else:
+                self._relock(saved, lambda: entry.__setitem__("device", self._locked(key)))
         if key is None:
             key = DeviceKey.generate()
             entry["device"] = self._locked(key)
             self._write()
         self._devices[url] = key
         return key
+
+    def _relock(self, saved: dict, lock):
+        """A key saved unlocked (an older Buddy for Mac) is locked now; if
+        that fails it stays as it was, to try again next time."""
+        if saved.get("protection") == lock_method():
+            return
+        try:
+            lock()
+            self._write()
+        except (CryptoError, OSError):
+            pass
 
     @staticmethod
     def _locked(key: DeviceKey) -> dict:
@@ -380,6 +475,7 @@ class KeyStore:
                 old = DeviceKey(unprotect(saved.get("protection", ""), saved.get("private", "")))
             except (CryptoError, ValueError, AttributeError):
                 continue
+            self._relock(saved, lambda: saved.update(self._locked(old)))
             if all(k.id != old.id for k in keys):
                 keys.append(old)
         return keys

@@ -5,10 +5,12 @@ core/atomic_io - never half-written, with a .bak copy - in its own file
 rather than the page's general settings.json.
 
 The token is the whole account - anyone with a copy could sign in as you -
-so on disk it's locked to this Windows account like the encryption keys
-(e2e.protect, DPAPI): a copy of the file (a backup, a synced folder) is no
-use anywhere else. Moving to another PC is what transfer files and the
-recovery code are for. Files from before the lock are locked on first read.
+so on disk it's locked to this user account like the encryption keys
+(e2e.protect - DPAPI on Windows, the Keychain on a Mac): a copy of the
+file (a backup, a synced folder) is no use anywhere else. Moving to
+another PC is what transfer files and the recovery code are for. Files
+from before the lock (or saved unlocked by an older Buddy for Mac) are
+locked on first read.
 """
 
 from __future__ import annotations
@@ -43,9 +45,10 @@ class IdentityStore:
             if "token_locked" in entry:
                 try:
                     token = e2e.unprotect(str(entry.get("protection", "")), str(entry["token_locked"])).decode("utf-8")
+                    plain = plain or entry.get("protection") != e2e.lock_method()   # saved unlocked: lock it
                 except (e2e.CryptoError, OSError, UnicodeDecodeError):
-                    # Locked by another Windows account or PC: kept aside, never overwritten.
-                    self._set_aside("Your saved Buddy Network identity was locked on another PC or Windows "
+                    # Locked by another user account or PC: kept aside, never overwritten.
+                    self._set_aside("Your saved Buddy Network identity was locked on another PC or user "
                                     "account, so it can't be used here – a new one will be made. Use a "
                                     "transfer file or your recovery code to bring an identity to this PC.")
                     self._servers = {}
