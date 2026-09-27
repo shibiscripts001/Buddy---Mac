@@ -10,3 +10,4 @@ pynput>=1.7
 pymupdf>=1.24
 pymupdf4llm>=0.0.17
 cryptography>=42      # Buddy Network's end-to-end encrypted DMs
+pyobjc-framework-Cocoa>=9; sys_platform == "darwin"   # AppKit: a GIF pasted in Buddy Network (pynput brings it too)
