@@ -31,6 +31,7 @@ that's only ever Buddy's own.
 
 import re
 
+from core.i18n import LANGUAGES, get_i18n, tr
 from core.theme import (
     DEFAULT_SIDE_PANE_TINT,
     DEFAULT_THEME,
@@ -150,42 +151,44 @@ def shell_fields(shared, autostart, autostart_available=True):
         subtheme = default_subtheme(theme)
     custom = subtheme == "Custom"
     autostart_field = check(
-        "autostart", "Start Buddy automatically when Resolve starts", bool(autostart),
-        tooltip="Registers a small background helper that watches for DaVinci Resolve launching and starts "
-                "Buddy itself the moment it does – so background tools like Time Tracker are already running "
-                "once you're in Resolve, instead of needing a trip to Workspace > Scripts every time.")
+        "autostart", tr("Start Buddy automatically when Resolve starts"), bool(autostart),
+        tooltip=tr("Registers a small background helper that watches for DaVinci Resolve launching and starts "
+                   "Buddy itself the moment it does – so background tools like Time Tracker are already running "
+                   "once you're in Resolve, instead of needing a trip to Workspace > Scripts every time."))
     if autostart is None:
-        autostart_field.update(disabled=True, tooltip="Could not read Windows startup settings.")
+        autostart_field.update(disabled=True, tooltip=tr("Could not read Windows startup settings."))
     if not autostart_available:
         autostart_field = None
     return [
-        heading("Appearance"),
-        select("theme", "Theme", theme, [(key, theme_label(key)) for key in list_themes()]),
-        select("subtheme", "Subtheme", subtheme, subthemes),
-        color("accent_color", "Accent", custom_color(shared, "accent"), custom),
-        color("background_color", "Background", custom_color(shared, "background"), custom),
-        color("panel_color", "Panels", custom_color(shared, "panel"), custom),
-        hint("Pick the Custom subtheme to choose your own colours.") if not custom else None,
+        heading(tr("Appearance")),
+        select("theme", tr("Theme"), theme, [(key, theme_label(key)) for key in list_themes()]),
+        select("subtheme", tr("Subtheme"), subtheme, subthemes),
+        color("accent_color", tr("Accent"), custom_color(shared, "accent"), custom),
+        color("background_color", tr("Background"), custom_color(shared, "background"), custom),
+        color("panel_color", tr("Panels"), custom_color(shared, "panel"), custom),
+        hint(tr("Pick the Custom subtheme to choose your own colours.")) if not custom else None,
         line(),
-        heading("Window"),
-        check("stay_on_top", "Keep Buddy on top of Resolve", shared.get("stay_on_top", False)),
-        select("split_tint", "Second pane in dual view", shared.get("split_tint", DEFAULT_SIDE_PANE_TINT),
+        heading(tr("Window")),
+        check("stay_on_top", tr("Keep Buddy on top of Resolve"), shared.get("stay_on_top", False)),
+        select("split_tint", tr("Second pane in dual view"), shared.get("split_tint", DEFAULT_SIDE_PANE_TINT),
                list(SIDE_PANE_TINTS.items()),
-               tooltip="Tints the tool on the right while dual view is on, so it's easy to tell which side is "
-                       "which."),
-        check("keep_running_in_tray", "Keep running in tray when window is closed",
+               tooltip=tr("Tints the tool on the right while dual view is on, so it's easy to tell which side is "
+                          "which.")),
+        check("keep_running_in_tray", tr("Keep running in tray when window is closed"),
               shared.get("keep_running_in_tray", True),
-              tooltip="When checked, closing the window (the [X] button) minimizes Buddy to the system tray "
-                      "instead of quitting – background tools like Time Tracker keep running. When unchecked, "
-                      "closing the window quits Buddy normally."),
+              tooltip=tr("When checked, closing the window (the [X] button) minimizes Buddy to the system tray "
+                         "instead of quitting – background tools like Time Tracker keep running. When unchecked, "
+                         "closing the window quits Buddy normally.")),
         autostart_field,
-        check("announcements_enabled", "Show announcements from Buddy", shared.get("announcements_enabled", True),
-              hint_text="Once a day Buddy checks for news (updates, known issues) and shows a small glowing dot "
-                        "next to \"Buddy\" when there's something new. Nothing about you or your projects is "
-                        "sent. Untick to stop checking."),
-        buttons(("Organize sidebar…", "organize",
-                 {"tooltip": "Reorder, show or hide the tools in the sidebar, and add or rename the dividers "
-                             "between them."})),
+        check("announcements_enabled", tr("Show announcements from Buddy"), shared.get("announcements_enabled", True),
+              hint_text=tr("Once a day Buddy checks for news (updates, known issues) and shows a small glowing dot "
+                           "next to \"Buddy\" when there's something new. Nothing about you or your projects is "
+                           "sent. Untick to stop checking.")),
+        buttons((tr("Organize sidebar…"), "organize",
+                 {"tooltip": tr("Reorder, show or hide the tools in the sidebar, and add or rename the dividers "
+                                "between them.")})),
+        line(),
+        select("language", tr("Language:"), shared.get("language", "English"), LANGUAGES),
     ]
 
 
@@ -223,6 +226,10 @@ def apply_shell(shared, key, value):
         return "announcements"
     if key == "autostart":
         return "autostart"
+    if key == "language" and value in LANGUAGES:
+        shared["language"] = value
+        get_i18n().language = value
+        return "theme"  # Returning 'theme' triggers a UI re-render for settings in shell_window
     return None
 
 

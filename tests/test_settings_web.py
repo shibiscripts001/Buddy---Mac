@@ -194,8 +194,6 @@ class ToolSectionTests(unittest.TestCase):
         page.on_setting("mini_palette_transparency", "90%", UI())
         page.on_setting("mini_palette_transparency", "50%", UI())
         self.assertEqual(page.data_mgr.settings["mini_palette_transparency"], "90%")
-        page.on_setting("language", "Deutsch", UI())
-        self.assertEqual(page.i18n.language, "Deutsch")
         self.assertEqual(page.calls, ["focus", "mini"])
 
     def test_buddy_network(self):

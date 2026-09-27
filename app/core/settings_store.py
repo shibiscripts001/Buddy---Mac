@@ -21,6 +21,7 @@ Two tiers, deliberately kept separate:
 import os
 
 from core import atomic_io
+from core.i18n import get_i18n
 
 BUDDY_DIR = os.path.join(os.path.expanduser("~"), ".buddy")
 SHARED_SETTINGS_PATH = os.path.join(BUDDY_DIR, "settings.json")
@@ -44,6 +45,7 @@ DEFAULT_SHARED_SETTINGS = {
     # The orb next to "Buddy": a once-a-day check for announcements (see
     # core/announcements.py). One checkbox in Settings turns it off.
     "announcements_enabled": True,
+    "language": "English",
 }
 
 
@@ -56,6 +58,7 @@ class SharedSettings:
         # tells the user once.
         self.load_warnings = []
         self._load()
+        get_i18n().language = self.values.get("language", "English")
         self._migrate_theme_preset()
 
     def _migrate_theme_preset(self):

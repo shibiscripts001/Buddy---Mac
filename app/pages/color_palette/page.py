@@ -57,7 +57,7 @@ from .color_engine import (
     extraction_image, import_palette_colors, relative_luminance, render_fixed_shape_visualization_image,
 )
 from .data_manager import DataManager
-from .i18n import TRANSLATIONS, get_i18n, tr
+from core.i18n import TRANSLATIONS, get_i18n, tr
 from .settings_panel import ColorPaletteSettingsMixin
 
 TABS = ("palettes", "generators", "extract", "visualize", "tools")
