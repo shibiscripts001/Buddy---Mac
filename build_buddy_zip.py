@@ -45,7 +45,7 @@ SKIP_DIR_NAMES = {"__pycache__", ".pytest_cache", ".git", ".claude"}
 SKIP_FILE_SUFFIXES = (".pyc", ".pyo", ".log")
 # Everything the app reads at runtime, source or not.
 INCLUDE_SUFFIXES = (".py", ".json", ".qss", ".svg", ".png", ".ico", ".txt", ".md", ".ttf",
-                    ".drb",   # Text Animator's Text+ template (a Resolve bin)
+                    ".drb",   # the Text+ template (a Resolve bin, text_animator/)
                     ".html", ".css", ".js")   # the web tool pages (core/web_page.py)
 
 

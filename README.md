@@ -24,10 +24,11 @@ from Python.
   online.
 - **Batch Clip Renamer** - renames a bin's clips, or just the selected ones,
   by sequential numbering or find & replace.
-- **Text Animator** - subtitles to styled, animated Text+: conversion, font
-  styling, layout and animation.
+- **Animation** - formerly Text Animator; its Text+ tab is empty for now, as
+  the Text+ tools moved to Transcribe.
 - **Transcribe** - subtitles from the timeline's dialogue, and translations,
-  run locally.
+  run locally; then subtitles to Text+, and Text+ font styling, layout and
+  animation.
 - **Color Palette Manager** - palettes, generators, colours from images and
   contrast checks. Never touches your project.
 - **Stills Exporter** - places markers, grabs stills from them on the Color
@@ -127,7 +128,9 @@ subtitles from the word timings, and puts them on subtitle track 1 as well as
 saving an SRT. Translation runs locally too (NLLB-200 or MADLAD-400), or
 through the model Ask Buddy uses. The engine and models are installed from
 inside Transcribe the first time, into `~/.buddy/transcribe/`. Resolve's
-render settings are saved before the audio render and restored after.
+render settings are saved before the audio render and restored after. Its
+Subtitle Conversion tab turns subtitles into Text+ clips, and the tabs after
+it style, place and animate them.
 
 ## Buddy Network
 

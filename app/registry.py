@@ -55,7 +55,7 @@ REGISTRY = [
     ("Media & Assets", _tool("media_relink", "Media Relink", "Media & Assets", "pages.media_relink.page", "MediaRelinkPage", mac=True)),
 
     ("Editing Tools", _tool("batch_clip_renamer", "Batch Clip Renamer", "Editing Tools", "pages.batch_clip_renamer.page", "BatchClipRenamerPage", mac=True)),
-    ("Editing Tools", _tool("text_animator", "Text Animator", "Editing Tools", "pages.text_animator.page", "TextAnimatorPage", mac=True)),
+    ("Editing Tools", _tool("text_animator", "Animation", "Editing Tools", "pages.text_animator.page", "AnimationPage", mac=True)),
     ("Editing Tools", _tool("transcribe", "Transcribe", "Editing Tools", "pages.transcribe.page", "TranscribePage", mac=True)),
     ("Editing Tools", _tool("color_palette", "Color Palette Manager", "Editing Tools", "pages.color_palette.page", "ColorPalettePage", mac=True)),
 
