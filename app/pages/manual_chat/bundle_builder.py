@@ -147,8 +147,11 @@ def pymupdf_status() -> tuple[bool, bool]:
 
 def install_hint() -> str:
     # Resolve's own interpreter, not "pip": it's rarely the one on PATH.
-    # Same reasoning as Buddy.py's launcher.
-    return f'"{standalone_python()}" -m pip install pymupdf pymupdf4llm'
+    # Same reasoning as Buddy.py's launcher. -s: Resolve runs Python isolated
+    # (seen on Windows; macOS's fuscript embeds Python the same way), so a
+    # package in the per-user folder is invisible to Buddy - without -s, pip
+    # would call a copy there "already satisfied" and install nothing.
+    return f'"{standalone_python()}" -s -m pip install pymupdf pymupdf4llm'
 
 
 def ollama_status() -> tuple[bool, bool]:
