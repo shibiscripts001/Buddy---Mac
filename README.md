@@ -106,6 +106,21 @@ Bring your own model: Google Gemini, Anthropic Claude, OpenAI, OpenRouter,
 Groq, Azure OpenAI, any OpenAI-compatible endpoint, or Ollama running locally.
 Keys are set in Settings and stored in your home folder.
 
+Conversations are saved locally in `~/.buddy/ask_buddy/conversations.json`.
+Use **Chats** to search past messages or rename a conversation. Click a manual
+citation to open the manual PDF at that page - the PDF the bundle was built
+from (Buddy asks where it is once, for a bundle built before that was
+recorded). Preview can't be sent to a page, so it opens in Chrome, Edge or
+Brave if one is installed, or in Preview with the page to go to. Image
+questions keep small preview thumbnails in saved chats.
+
+**Reading your project.** With Resolve running, Buddy includes the detected
+Free or Studio edition with every question (without a connection, the
+edition is marked unknown). **Check project** scans the current timeline for
+frame-rate and upscaling mismatches and missing local source paths, then
+suggests next steps. **Explain clip** focuses on the selected timeline clip
+or the video clip under the playhead before answering.
+
 **Manual data.** Answers are grounded in a bundle built from the DaVinci
 Resolve Reference Manual PDF, kept in `~/.buddy/manual/bundle/`. Buddy runs
 without it, but answers are then ungrounded and uncited. To build it,

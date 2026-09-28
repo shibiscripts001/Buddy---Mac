@@ -38,9 +38,17 @@ def build_file_index(search_root, progress=None, should_stop=None):
     Folders and files are walked in name order, so candidates always list
     the same way: os.walk() gives whatever order the file system does -
     alphabetical on NTFS, but not on macOS's APFS."""
+    if not os.path.isdir(search_root):
+        raise NotADirectoryError(search_root)
+
+    def raise_walk_error(error):
+        # os.walk silently skips unreadable or vanished folders by default.
+        # A partial index must not be reported as a completed search.
+        raise error
+
     index = {}
     seen = 0
-    for dirpath, dirnames, filenames in os.walk(search_root):
+    for dirpath, dirnames, filenames in os.walk(search_root, onerror=raise_walk_error):
         dirnames.sort(key=str.casefold)
         for filename in sorted(filenames, key=str.casefold):
             key = filename.lower()
