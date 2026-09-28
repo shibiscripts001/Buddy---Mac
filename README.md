@@ -32,7 +32,8 @@ from Python.
 - **Audio Assistant** - new: an easier alternative to the Fairlight page for a
   clip's audio. Its Timeline tab mirrors the audio tracks with each clip's
   waveform, and sets clip volume, pan, fades, loudness to a target, Voice
-  Isolation and the Dialogue Leveler. Effects are coming.
+  Isolation and the Dialogue Leveler. A volume curve drawn on a clip becomes
+  Resolve keyframes. Effects are coming.
 - **Color Palette Manager** - palettes, generators, colours from images and
   contrast checks. Never touches your project.
 - **Stills Exporter** - places markers, grabs stills from them on the Color
