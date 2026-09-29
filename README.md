@@ -37,9 +37,9 @@ from Python.
   Resolve keyframes. Effects are coming.
 - **Color Palette Manager** - palettes, generators, colours from images and
   contrast checks. Never touches your project.
-- **Stills Exporter** - places markers, grabs stills from them on the Color
-  page, and exports them as image files.
-- **YouTube Chapters** - a YouTube chapter list from the timeline's markers.
+- **Marker Manager** - two tabs: Stills Exporter (places markers, grabs stills
+  from them on the Color page, and exports them as image files) and YouTube
+  Chapters (a YouTube chapter list from the timeline's markers).
 - **Time Tracker** - tracks time against whichever project is open, with idle
   detection.
 - **Buddy Network** - an anonymous chat between Buddy users.

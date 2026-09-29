@@ -57,13 +57,15 @@ REGISTRY = [
     ("Media & Assets", _tool("media_relink", "Media Relink", "Media & Assets", "pages.media_relink.page", "MediaRelinkPage", mac=True)),
 
     ("Editing Tools", _tool("batch_clip_renamer", "Batch Clip Renamer", "Editing Tools", "pages.batch_clip_renamer.page", "BatchClipRenamerPage", mac=True)),
+    # Not yet checked on a Mac (its player and video surface are the new part).
+    ("Editing Tools", _tool("dailies", "Dailies", "Editing Tools", "pages.dailies.page", "DailiesPage")),
     ("Editing Tools", _tool("text_animator", "Animation", "Editing Tools", "pages.text_animator.page", "AnimationPage", mac=True)),
     ("Editing Tools", _tool("transcribe", "Transcribe", "Editing Tools", "pages.transcribe.page", "TranscribePage", mac=True)),
     ("Editing Tools", _tool("audio_assistant", "Audio Assistant", "Editing Tools", "pages.audio_assistant.page", "AudioAssistantPage", mac=True)),
     ("Editing Tools", _tool("color_palette", "Color Palette Manager", "Editing Tools", "pages.color_palette.page", "ColorPalettePage", mac=True)),
 
-    ("Export & Delivery", _tool("stills_exporter", "Stills Exporter", "Export & Delivery", "pages.stills_exporter.page", "StillsExporterPage", mac=True)),
-    ("Export & Delivery", _tool("youtube_chapters", "YouTube Chapters", "Export & Delivery", "pages.youtube_chapters.page", "YouTubeChaptersPage", mac=True)),
+    # Stills Exporter and YouTube Chapters, as its two tabs - both checked there.
+    ("Export & Delivery", _tool("marker_manager", "Marker Manager", "Export & Delivery", "pages.marker_manager.page", "MarkerManagerPage", mac=True)),
 
     ("Business", _tool("time_tracker", "Time Tracker", "Business", "pages.time_tracker.page", "TimeTrackerPage", mac=True)),
 

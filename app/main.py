@@ -20,7 +20,7 @@ import sys
 from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtWidgets import QApplication
 
-from core import gui_gc, resolve_bridge, startup_manager
+from core import ffmpeg_log, gui_gc, resolve_bridge, startup_manager
 from core.i18n import tr
 from core.shell_window import ShellWindow
 from core.single_instance import notify_existing_instance, SingleInstanceServer
@@ -36,6 +36,9 @@ def main(start_hidden=False):
     # Web tool pages (core/web_page.py) share GPU contexts with each other;
     # QtWebEngine needs this set before the QApplication exists.
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+    # Before any preview opens a file: Qt's FFmpeg otherwise prints every
+    # clip's stream dump and warnings to the console (core/ffmpeg_log.py).
+    ffmpeg_log.silence()
     app = QApplication(sys.argv)
     gui_gc.install(app)
     # The tray icon is the app's actual "still running" signal once the
