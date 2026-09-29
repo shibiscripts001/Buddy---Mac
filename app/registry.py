@@ -47,6 +47,8 @@ def _tool(tool_id, display_name, category, import_path, class_name, mac=False):
 REGISTRY = [
     ("Ask", _tool("manual_chat", "Ask Buddy", "Ask", "pages.manual_chat.page", "ManualChatPage", mac=True)),
 
+    ("Audit", _tool("audit", "Audit", "Audit", "pages.audit.page", "AuditPage", mac=True)),
+
     ("Setup", _tool("project_setup", "Project Setup", "Setup", "pages.project_setup.page", "ProjectSetupPage", mac=True)),
 
     ("Media & Assets", _tool("asset_manager", "Asset Manager", "Media & Assets", "pages.asset_manager.page", "AssetManagerPage", mac=True)),

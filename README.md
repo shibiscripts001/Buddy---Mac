@@ -12,6 +12,7 @@ from Python.
 
 - **Ask Buddy** - chat about Resolve, grounded in the Reference Manual, with
   citations. Can read your project; can change it only with your consent.
+- **Audit** - new: a main tab of its own, the page only for now.
 - **Project Setup** - a bin structure from a list, folder-tree import,
   bins to timelines, and multicam sync.
 - **Asset Manager** - a library of the images, audio and video you reuse,
