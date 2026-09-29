@@ -160,6 +160,12 @@ messages (end-to-end encrypted) and a buddies list. Anonymous by design: no
 accounts, emails or IP addresses. Buddy connects to the public server by
 default; `server/README.md` covers running your own.
 
+The bug button in the header (and on the desktop layout's taskbar) sends a
+bug report - what went wrong, up to six screenshots, and Buddy's, macOS's
+and Resolve's versions - to the same server, with Buddy Network on or off.
+The owner reads them in Buddy Network's Admin panel (Bugs tab). See
+`core/bug_report.py` and `server/bugs.py`.
+
 ## Themes
 
 Seven themes, each with its own subthemes and a Custom palette: Default (the
