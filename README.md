@@ -14,7 +14,8 @@ from Python.
   citations. Can read your project; can change it only with your consent.
 - **Audit** - new: a main tab of its own, the page only for now.
 - **Project Setup** - a bin structure from a list, folder-tree import,
-  bins to timelines, and multicam sync.
+  bins to timelines, multicam sync, and proxy media rendered with ffmpeg
+  (H.264, H.265, ProRes, DNxHR or CineForm) and linked in Resolve.
 - **Asset Manager** - a library of the images, audio and video you reuse,
   with per-project lists.
 - **Image Importer** - images into a bin straight from the clipboard: a
