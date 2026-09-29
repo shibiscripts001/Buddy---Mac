@@ -5,7 +5,6 @@ catch a transcript clipped by its player or panels overlapping at a breakpoint.
 """
 import json
 import os
-import sys
 import time
 import unittest
 
@@ -123,8 +122,6 @@ class NovaLayoutTests(unittest.TestCase):
         after = self.js("return document.querySelector('.player-panel').getBoundingClientRect().height;")
         self.assertEqual(before, after)
 
-    @unittest.skipUnless(sys.platform == "win32", "reads pixels back from an offscreen web view, which "
-                         "needs the Windows build's software renderer (BUDDY_WEB_SOFTWARE)")
     def test_orbs_are_dim_stable_and_do_not_paint_the_rounded_corner(self):
         from PySide6.QtGui import QColor
         # Match WebToolPage's transparent surface: a browser with an opaque
@@ -146,6 +143,19 @@ class NovaLayoutTests(unittest.TestCase):
             scale = image.devicePixelRatio()
             return [image.pixelColor(round(x * scale), round(y * scale)).getRgb()[:3]
                     for x, y in ((0, 0), (80, 8), (420, 385), (880, 680))]
+
+        # Some machines (GitHub's release runners among them) can't read a
+        # web view's pixels back at all: grab() gives a flat fill. Check with
+        # a solid red block first, and skip rather than fail on one of those.
+        self.js("""const probe = document.createElement('div'); probe.id = 'pixel-probe';
+            probe.style.cssText = 'position:fixed;inset:0;background:#ff0000;z-index:99999';
+            document.body.append(probe); return true;""")
+        self.settle()
+        readable = all(r > 200 and g < 60 and b < 60 for r, g, b in samples())
+        self.js("document.getElementById('pixel-probe').remove(); return true;")
+        self.settle()
+        if not readable:
+            self.skipTest("this machine can't read a web view's pixels back")
 
         before = samples()
         self.assertTrue(max(before[0]) < 25, before)
