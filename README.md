@@ -85,6 +85,20 @@ Buddy also runs on Windows: `python build_installer.py` builds a Windows
 installer (Inno Setup), and `docs/manual_install.txt` covers installing there
 by hand.
 
+## Updates
+
+Once installed, Buddy updates itself. Once a day it looks at the latest GitHub
+release, and when there's a newer one an **Update** button appears in the
+header: it shows what changed, downloads `buddy.zip` (and `Buddy.py`, if that
+changed) from the release, checks each is exactly the size and SHA-256 the
+release's `buddy-update.json` says, keeps the old one, and restarts Buddy.
+On a Mac it quits instead, to be reopened from Workspace > Scripts - a Buddy
+started any other way can't connect to the free Resolve. Settings > Updates turns the daily check off, checks now, or rolls
+back to the version the last update replaced. A release that needs a package
+Buddy doesn't have yet sends you to its installer instead. Updates aren't
+signed: they're trusted as far as GitHub and the account publishing the
+releases are (see `app/core/updater.py`).
+
 ## Running from source
 
 ```bash

@@ -109,6 +109,11 @@ jobs:
         if: steps.exists.outputs.skip == 'false'
         run: python build_mac_installer.py
 
+      # What a running Buddy updates itself from (app/core/updater.py).
+      - name: Write the update manifest
+        if: steps.exists.outputs.skip == 'false'
+        run: python build_update_manifest.py --platform mac
+
       - name: Publish the release
         if: steps.exists.outputs.skip == 'false'
         env:
@@ -124,4 +129,5 @@ jobs:
 
           SHA-256 of Buddy-$v.pkg: \`$sha\` - to check a download, run \`shasum -a 256 Buddy-$v.pkg\` in Terminal and compare.
           EOF
-          gh release create "v$v" "$pkg" --title "Buddy $v for macOS" --notes-file notes.md --generate-notes --target "$GITHUB_SHA"
+          # buddy.zip, Buddy.py, buddy-update.json: for Buddy's own Update button.
+          gh release create "v$v" "$pkg" buddy.zip Buddy.py dist/buddy-update.json --title "Buddy $v for macOS" --notes-file notes.md --generate-notes --target "$GITHUB_SHA"
