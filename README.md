@@ -29,7 +29,7 @@ from Python.
 - **Animation** - formerly Text Animator; its Text+ tab is empty for now, as
   the Text+ tools moved to Subtitles.
 - **Subtitles** (formerly Transcribe) - subtitles from the timeline's dialogue, and translations,
-  run locally; then subtitles to Text+, and Text+ font styling, layout and
+  run locally; then subtitles to Text+, and Text+ font styling, layout, word-by-word spacing and
   animation.
 - **Audio Assistant** - new: an easier alternative to the Fairlight page for a
   clip's audio. Its Timeline tab mirrors the audio tracks with each clip's
@@ -43,6 +43,8 @@ from Python.
   Chapters (a YouTube chapter list from the timeline's markers).
 - **Time Tracker** - tracks time against whichever project is open, with idle
   detection.
+- **Command Center** - new: a main tab of its own, the page only for now.
+  It will hold hot key combos that run Buddy's actions.
 - **Buddy Network** - an anonymous chat between Buddy users.
 
 The sidebar can be reordered and tools hidden from Settings.

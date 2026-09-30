@@ -69,6 +69,8 @@ REGISTRY = [
 
     ("Business", _tool("time_tracker", "Time Tracker", "Business", "pages.time_tracker.page", "TimeTrackerPage", mac=True)),
 
+    ("Command Center", _tool("command_center", "Command Center", "Command Center", "pages.command_center.page", "CommandCenterPage", mac=True)),
+
     # "" = a plain line above it instead of a heading.
     ("", BuddyNetworkPage),
 ]
