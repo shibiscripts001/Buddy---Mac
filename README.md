@@ -59,7 +59,7 @@ The sidebar can be reordered and tools hidden from Settings.
 ## Installing
 
 **With the installer.** Download `Buddy-<version>.pkg` from the
-[Releases](https://github.com/shibiscripts001/Buddy---Mac/releases) page (built
+[Releases](https://github.com/tofulover67/Buddy---Mac/releases) page (built
 by `.github/workflows/release.yml` whenever `VERSION` changes), or build it with
 `python3 build_mac_installer.py`, which writes `dist/Buddy-<version>.pkg`, then
 open the .pkg. It installs Python from

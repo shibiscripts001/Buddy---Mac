@@ -56,7 +56,7 @@ from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequ
 
 from core.app_version import buddy_version
 
-REPO = "shibiscripts001/Buddy---Mac"
+REPO = "tofulover67/Buddy---Mac"
 PLATFORM = "mac"
 RELEASES = f"https://github.com/{REPO}/releases"
 MANIFEST_NAME = "buddy-update.json"
