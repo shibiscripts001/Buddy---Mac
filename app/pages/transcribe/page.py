@@ -114,7 +114,7 @@ _WHILE_BUSY = {"stop", "tab", "answer", "option", "mixed", "tr_option", "targets
 
 class TranscribePage(WebToolPage):
     tool_id = "transcribe"
-    display_name = "Transcribe"
+    display_name = "Subtitles"      # formerly "Transcribe" (tool_id kept, so settings carry over)
     category = "Editing Tools"
     web_dir = str(Path(__file__).with_name("web"))
 
@@ -349,7 +349,7 @@ class TranscribePage(WebToolPage):
         del self._log[:-LOG_LIMIT]
         self.emit("log", self._log)
 
-    def _alert(self, text, title="Transcribe"):
+    def _alert(self, text, title="Subtitles"):
         self.emit("alert", {"title": title, "text": text})
 
     # ------------------------------------------------------------- asking --

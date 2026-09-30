@@ -27,8 +27,8 @@ from Python.
 - **Batch Clip Renamer** - renames a bin's clips, or just the selected ones,
   by sequential numbering or find & replace.
 - **Animation** - formerly Text Animator; its Text+ tab is empty for now, as
-  the Text+ tools moved to Transcribe.
-- **Transcribe** - subtitles from the timeline's dialogue, and translations,
+  the Text+ tools moved to Subtitles.
+- **Subtitles** (formerly Transcribe) - subtitles from the timeline's dialogue, and translations,
   run locally; then subtitles to Text+, and Text+ font styling, layout and
   animation.
 - **Audio Assistant** - new: an easier alternative to the Fairlight page for a
@@ -142,14 +142,14 @@ Settings (you type a sentence out in full; unticking revokes it), and
 approval of every action - the model only proposes, Buddy shows exactly what
 would change, and nothing happens until you press Apply.
 
-## Transcribe
+## Subtitles
 
 Turns the timeline's dialogue into subtitles locally: it renders the audio
 mix, runs Whisper (faster-whisper) or NVIDIA Parakeet, builds readable
 subtitles from the word timings, and puts them on subtitle track 1 as well as
 saving an SRT. Translation runs locally too (NLLB-200 or MADLAD-400), or
 through the model Ask Buddy uses. The engine and models are installed from
-inside Transcribe the first time, into `~/.buddy/transcribe/`. Resolve's
+inside Subtitles the first time, into `~/.buddy/transcribe/`. Resolve's
 render settings are saved before the audio render and restored after. Its
 Subtitle Conversion tab turns subtitles into Text+ clips, and the tabs after
 it style, place and animate them.
