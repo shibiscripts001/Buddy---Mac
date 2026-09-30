@@ -22,10 +22,10 @@ from Python.
   copied image, copied files, or an image URL.
 - **SVG Importer** - SVG artwork and Lottie animations as Fusion nodes,
   copied for pasting into the Fusion page.
-- **Media Relink** - relinks offline clips, and relocates media that's still
-  online.
-- **Batch Clip Renamer** - renames a bin's clips, or just the selected ones,
-  by sequential numbering or find & replace.
+- **Media Manager** - two tabs: Batch Clip Renamer (renames a bin's clips,
+  or just the selected ones, by sequential numbering or find & replace) and
+  Media Relink (relinks offline clips, and relocates media that's still
+  online).
 - **Animation** - formerly Text Animator; its Text+ tab is empty for now, as
   the Text+ tools moved to Subtitles.
 - **Subtitles** (formerly Transcribe) - subtitles from the timeline's dialogue, and translations,

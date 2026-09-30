@@ -54,13 +54,13 @@ REGISTRY = [
     ("Media & Assets", _tool("asset_manager", "Asset Manager", "Media & Assets", "pages.asset_manager.page", "AssetManagerPage", mac=True)),
     ("Media & Assets", _tool("image_importer", "Image Importer", "Media & Assets", "pages.image_importer.page", "ImageImporterPage", mac=True)),
     ("Media & Assets", _tool("svg_importer", "SVG Importer", "Media & Assets", "pages.svg_importer.page", "SVGImporterPage", mac=True)),
-    ("Media & Assets", _tool("media_relink", "Media Relink", "Media & Assets", "pages.media_relink.page", "MediaRelinkPage", mac=True)),
+    # Batch Clip Renamer and Media Relink, as its two tabs - both checked there.
+    ("Media & Assets", _tool("media_manager", "Media Manager", "Media & Assets", "pages.media_manager.page", "MediaManagerPage", mac=True)),
 
-    ("Editing Tools", _tool("batch_clip_renamer", "Batch Clip Renamer", "Editing Tools", "pages.batch_clip_renamer.page", "BatchClipRenamerPage", mac=True)),
     # Not yet checked on a Mac (its player and video surface are the new part).
     ("Editing Tools", _tool("dailies", "Dailies", "Editing Tools", "pages.dailies.page", "DailiesPage")),
     ("Editing Tools", _tool("text_animator", "Animation", "Editing Tools", "pages.text_animator.page", "AnimationPage", mac=True)),
-    ("Editing Tools", _tool("transcribe", "Transcribe", "Editing Tools", "pages.transcribe.page", "TranscribePage", mac=True)),
+    ("Editing Tools", _tool("transcribe", "Subtitles", "Editing Tools", "pages.transcribe.page", "TranscribePage", mac=True)),
     ("Editing Tools", _tool("audio_assistant", "Audio Assistant", "Editing Tools", "pages.audio_assistant.page", "AudioAssistantPage", mac=True)),
     ("Editing Tools", _tool("color_palette", "Color Palette Manager", "Editing Tools", "pages.color_palette.page", "ColorPalettePage", mac=True)),
 
