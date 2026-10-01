@@ -71,6 +71,9 @@ class SettingsColourTests(unittest.TestCase):
             if self.dialog._ready:
                 break
         wait(200)
+        # The swatches are on the Look group's page.
+        js(self.dialog.view, "(() => { document.querySelector('.set-rail-item[title=Look]').click(); return 1; })()")
+        wait(100)
 
     def _close(self):
         self.dialog.hide()
