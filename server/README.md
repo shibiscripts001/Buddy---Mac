@@ -68,6 +68,7 @@ Run `push.sh` again to update the code; it restarts the service.
 | `social.py` | Buddies, DMs, blocking, deleting an account. |
 | `gifs.py` | GIF search: asks GIPHY for Buddy, keeps results, shares out GIPHY's hourly limit. |
 | `admin.py` | Reports, bans, roles, the admin log. |
+| `profiles.py` | Profile pages (and clearing one, for staff) and the who's-here list in public rooms. |
 | `common.py` | The shapes users, rooms and messages take on the wire. |
 | `tryout.py` | The terminal chatter from step 4. |
 | `deploy/` | `push.sh` and `setup.sh` (see Hosting your own), `hardening.conf` for the service. |
