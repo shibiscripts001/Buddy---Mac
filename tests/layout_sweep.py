@@ -139,6 +139,11 @@ class Report:
 
     def check(self, where, view, size):
         result = js(view, FIND)
+        if result and result["elements"] and (result["overlaps"] or result["sideways"] > 1):
+            # GitHub's Mac can still be showing the last size's layout (0.5.0
+            # failed that way, once): a real problem is still there a moment later.
+            wait(600)
+            result = js(view, FIND)
         if not result or not result["elements"]:
             self.problems.setdefault((where, "NOTHING RENDERED", ""), []).append(size)
             return
