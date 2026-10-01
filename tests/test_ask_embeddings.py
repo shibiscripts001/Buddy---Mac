@@ -135,6 +135,9 @@ class InstallTests(_TempRoot):
         self.assertFalse((self.root / "llama.cpp" / "escaped.txt").exists())
         self.assertFalse((self.root / "escaped.txt").exists())
 
+    # Defender is Windows-only, and pretending to be Windows (os.name "nt")
+    # makes pathlib build Windows paths, which a Mac can't.
+    @unittest.skipUnless(sys.platform == "win32", "Windows Defender is Windows only")
     def test_defender_reads_threats_from_its_exit_code(self):
         from core import defender
         with mock.patch.object(defender.os, "name", "nt"), mock.patch.dict(os.environ, {"ProgramFiles": str(self.root)}), \

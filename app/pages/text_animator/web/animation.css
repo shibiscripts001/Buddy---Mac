@@ -48,6 +48,13 @@
 .pv-go { justify-content: flex-end; }
 .pv-reframed { justify-content: flex-end; }
 
+/* Mid-width panes: three columns don't fit - the options get a row of their
+   own under the chosen preset and the buttons, instead of running under them. */
+@media (max-width: 900px) {
+    .pv-apply { grid-template-columns: minmax(0, 1fr) auto; }
+    .pv-options { grid-column: 1 / -1; grid-row: 2; }
+}
+
 /* Narrow panes: the card stacks - too tall to keep in view, so the whole
    page scrolls again. */
 @media (max-width: 720px) {
