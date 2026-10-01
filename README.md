@@ -43,7 +43,7 @@ from Python.
   Chapters (a YouTube chapter list from the timeline's markers).
 - **Time Tracker** - tracks time against whichever project is open, with idle
   detection.
-- **Command Center** - new: a main tab of its own, the page only for now.
+- **Command Center** - new: a main tab of its own. Run buttons for markers, jumping between them, copying the timecode or the frame, clip colours, Animation presets, saving a timeline version and removing gaps (experimental). System-wide hot keys for them are Windows-only so far; a Mac version needs its own (macOS asks for permission).
   It will hold hot key combos that run Buddy's actions.
 - **Buddy Network** - an anonymous chat between Buddy users.
 
