@@ -2,6 +2,7 @@
 # VERSION (or this file) changes on main, and by hand (Actions > Release >
 # Run workflow); a version that's already released is skipped, so bump
 # VERSION to release again.
+# (Editing this file runs it too - how to retry a version whose run failed.)
 #
 # It builds from the repo alone on a clean Mac: build_mac_installer.py makes
 # buddy.zip and the .pkg with pkgbuild/productbuild, which every macOS has.

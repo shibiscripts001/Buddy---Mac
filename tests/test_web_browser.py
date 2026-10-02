@@ -7,12 +7,15 @@ browser profile or settings."""
 
 import os
 import shutil
+import sys
 import tempfile
 import time
 import unittest
+from pathlib import Path
 from unittest import mock
 
 import _paths  # noqa: F401
+from core import audio_sessions
 from pages.web import browser as b
 
 try:
@@ -35,7 +38,8 @@ class AddressTests(unittest.TestCase):
         self.assertEqual(b.address_to_url("fusion", "google"), "https://www.google.com/search?q=fusion")
         self.assertEqual(b.address_to_url("what is 4:2:2?", "bing"), "https://www.bing.com/search?q=what+is+4%3A2%3A2%3F")
         self.assertEqual(b.address_to_url("readme.txt"), "https://duckduckgo.com/?q=readme.txt")   # not a site
-        self.assertTrue(b.address_to_url(r"D:\Footage\a.png").startswith("file:///D:/Footage/a.png"))
+        if sys.platform == "win32":                                  # a drive-letter path is only a path there
+            self.assertTrue(b.address_to_url(r"D:\Footage\a.png").startswith("file:///D:/Footage/a.png"))
         self.assertIsNone(b.address_to_url("   "))
         self.assertTrue(b.address_to_url("cats", "nonsense").startswith("https://duckduckgo.com/"))
 
@@ -355,7 +359,7 @@ class BrowserTests(unittest.TestCase):
             path = os.path.join(self.tmp, f"{name}.html")
             with open(path, "w", encoding="utf-8") as fh:
                 fh.write(f"<title>Page {name.upper()}</title><h1>{name}</h1>")
-            self.pages.append("file:///" + path.replace("\\", "/"))
+            self.pages.append(Path(path).as_uri())
 
     def browser(self):
         page = self.wp.WebBrowserPage(self.host)
@@ -507,7 +511,7 @@ class BrowserTests(unittest.TestCase):
         with open(song, "w", encoding="utf-8") as fh:
             fh.write('<title>Song</title><audio src="tone.wav" autoplay loop></audio>')
         page = self.browser()
-        page.on_go({"text": "file:///" + song.replace("\\", "/")})
+        page.on_go({"text": Path(song).as_uri()})
         tab = page.active
         playing = lambda: _js(tab.page, "!document.querySelector('audio').paused")
         self.until(lambda: playing() is True)
@@ -541,7 +545,7 @@ class BrowserTests(unittest.TestCase):
                      "addEventListener('beforeunload', e => { e.preventDefault(); e.returnValue = ''; });"
                      "</script>")
         page = self.browser()
-        page.on_go({"text": "file:///" + held.replace("\\", "/")})
+        page.on_go({"text": Path(held).as_uri()})
         tab = page.active
         self.until(lambda: tab.title == "Held" and not tab.loading)
         from PySide6.QtCore import QPoint, Qt
@@ -610,7 +614,8 @@ class BrowserTests(unittest.TestCase):
         page.on_setting("downloads", os.path.join(self.tmp, "nowhere"), ui)
         ui.alert.assert_called_once()
         keys = [f.get("key") for f in page.settings_fields() if f.get("key")]
-        self.assertEqual(keys, ["sleep_after", "never_sleep", "duck", "duck_level", "video_quality", "search",
+        ducking = ["duck", "duck_level"] if audio_sessions.available else []      # lowering the sound is Windows-only
+        self.assertEqual(keys, ["sleep_after", "never_sleep", *ducking, "video_quality", "search",
                                 "region", "suggest",
                                 "blocking", "youtube_ads", "allow_ads", "downloads"])
         page.on_go({"text": "gooey.dev"})
