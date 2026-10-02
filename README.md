@@ -145,7 +145,11 @@ Free or Studio edition with every question (without a connection, the
 edition is marked unknown). **Check project** scans the current timeline for
 frame-rate and upscaling mismatches and missing local source paths, then
 suggests next steps. **Explain clip** focuses on the selected timeline clip
-or the video clip under the playhead before answering.
+or the video clip under the playhead before answering. What it reads goes to
+your AI provider with the question, so with a cloud provider it asks first
+(once, for that provider's address; Settings > AI has the switch) and answers
+from the manual alone if you say no - a server on your own Mac or network needs
+no permission.
 
 **Manual data.** Answers are grounded in a bundle built from the DaVinci
 Resolve Reference Manual PDF, kept in `~/.buddy/manual/bundle/`. Buddy runs
