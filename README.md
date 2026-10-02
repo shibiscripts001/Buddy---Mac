@@ -47,6 +47,10 @@ from Python.
   Chapters (a YouTube chapter list from the timeline's markers).
 - **Time Tracker** - tracks time against whichever project is open, with idle
   detection.
+- **Web** - new: a light browser built into Buddy (tabs that sleep in the
+  background, private tabs, ad and tracker blocking with EasyList and uBlock
+  Origin's filter lists, downloads that drag into the Media Pool). Windows
+  only for now - on a Mac it's a placeholder until it's been run there.
 - **Command Center** - new: a main tab of its own. Run buttons for markers, jumping between them, copying the timecode or the frame, clip colours, Animation presets, saving a timeline version and removing gaps (experimental). System-wide hot keys for them are Windows-only so far; a Mac version needs its own (macOS asks for permission).
   It will hold hot key combos that run Buddy's actions.
 - **Buddy Network** - an anonymous chat between Buddy users.
@@ -190,7 +194,8 @@ The owner reads them in Buddy Network's Admin panel (Bugs tab). See
 ## Themes
 
 Seven themes, each with its own subthemes and a Custom palette: Default (the
-look of DaVinci Resolve itself), Don't be evil, Retro, Modern, Nova, Off-world
+look of DaVinci Resolve itself, in DaVinci's red or the colour variants Blue,
+Teal, Green, Yellow, Orange, Purple and Pink), Don't be evil, Retro, Modern, Nova, Off-world
 and Desktop (tools in floating windows). Open Sans ships in
 `app/assets/fonts/` under the SIL Open Font License.
 

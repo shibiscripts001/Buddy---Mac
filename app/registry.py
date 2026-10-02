@@ -69,6 +69,10 @@ REGISTRY = [
 
     ("Business", _tool("time_tracker", "Time Tracker", "Business", "pages.time_tracker.page", "TimeTrackerPage", mac=True)),
 
+    # Not yet run on a Mac (Qt WebEngine's browsing, the audio ducking and
+    # the encrypted sign-ins are Windows-first): a placeholder there for now.
+    ("Web", _tool("web", "Web", "Web", "pages.web.page", "WebBrowserPage", mac=False)),
+
     ("Command Center", _tool("command_center", "Command Center", "Command Center", "pages.command_center.page", "CommandCenterPage", mac=True)),
 
     # "" = a plain line above it instead of a heading.
