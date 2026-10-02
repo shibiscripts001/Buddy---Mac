@@ -26,8 +26,12 @@ from Python.
   or just the selected ones, by sequential numbering or find & replace) and
   Media Relink (relinks offline clips, and relocates media that's still
   online).
-- **Animation** - formerly Text Animator; its Text+ tab is empty for now, as
-  the Text+ tools moved to Subtitles.
+- **Animation** - formerly Text Animator. Previews puts motion presets on the
+  clips selected in Resolve - stills, video, Text+ - with the In on each clip's
+  first frame and the Out on its last, and an Editor for presets of your own.
+  Animate by plays a preset line by line, word by word or letter by letter on a
+  Text+, a stagger apart in the order chosen, through Fusion's text Follower.
+  Its Titles tab is empty for now, as the Text+ tools moved to Subtitles.
 - **Subtitles** (formerly Transcribe) - subtitles from the timeline's dialogue, and translations,
   run locally; then subtitles to Text+, and Text+ font styling, layout, word-by-word spacing and
   animation.

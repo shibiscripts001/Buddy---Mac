@@ -175,6 +175,8 @@ class PageTests(unittest.TestCase):
         self.addCleanup(self.dialog.deleteLater)
         self.addCleanup(self.dialog.close)
         self.dialog.show()
+        self._until("document.querySelector('[data-page=general]') !== null")      # Settings opens on General
+        self._js("openPage('alpha')")
         self._until("document.querySelector('[data-page=alpha] [data-key=name]') !== null")
 
     def _js(self, code):
@@ -271,6 +273,8 @@ class MacShortcutPageTests(unittest.TestCase):
         self.addCleanup(self.dialog.deleteLater)
         self.addCleanup(self.dialog.close)
         self.dialog.show()
+        self._until("document.querySelector('[data-page=general]') !== null")      # Settings opens on General
+        self._js("openPage('alpha')")
         self._until("document.querySelector('[data-page=alpha] [data-key=name]') !== null")
         de = TRANSLATIONS["General"]["Deutsch"]
         self._until(f"[...document.querySelectorAll('.set-rail-item')].some(b => b.textContent === {de!r})")
