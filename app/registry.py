@@ -75,6 +75,10 @@ REGISTRY = [
 
     ("Command Center", _tool("command_center", "Command Center", "Command Center", "pages.command_center.page", "CommandCenterPage", mac=True)),
 
+    ("Essentials", _tool("essentials", "Essentials", "Essentials", "pages.essentials.page", "EssentialsPage", mac=True)),
+
+    ("Games", _tool("games", "Games", "Games", "pages.games.page", "GamesPage", mac=True)),
+
     # "" = a plain line above it instead of a heading.
     ("", BuddyNetworkPage),
 ]

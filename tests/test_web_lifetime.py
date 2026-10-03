@@ -51,7 +51,7 @@ class Shell(QWidget if HAVE_WEB else object):
     def theme_tokens(self):
         return get_theme_tokens("Resolve")
 
-    def currentWidget(self):
+    def front(self):            # the pane stack's page in front: none here
         return None
 
     def _on_settings_applied(self):

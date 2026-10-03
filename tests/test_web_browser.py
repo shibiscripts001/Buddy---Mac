@@ -383,7 +383,9 @@ class BrowserTests(unittest.TestCase):
         a, bee = page.tabs
         self.assertIsNone(a.web)                                           # never shown: no page at all
         self.assertIs(page.active, bee)
-        self.until(lambda: bee.title == "Page B")
+        self.assertIsNone(bee.web)                                         # shown, but asleep since Buddy started
+        page.wake_active()
+        self.until(lambda: bee.page is not None and not bee.loading and bee.title == "Page B")
         page.select(a)
         self.until(lambda: a.title == "Page A" and not a.loading)
         bee.seen = time.time() - 3600
@@ -400,6 +402,51 @@ class BrowserTests(unittest.TestCase):
         page._save()
         self.assertEqual([t["awake"] for t in self.saved["tabs"]], [True, False])
         self.assertEqual(self.saved["active"], 1)
+
+    def test_buddy_starts_with_the_shown_tab_asleep(self):
+        """So a site playing music or a video doesn't start up with Buddy."""
+        self.saved["tabs"] = [{"url": self.pages[0], "title": "Page A"}, {"url": self.pages[1], "title": "Page B"}]
+        self.saved["active"] = 0
+        page = self.browser()
+        a, bee = page.tabs
+        self.assertIs(page.active, a)
+        self.assertTrue(all(t.web is None and t.page is None for t in page.tabs))
+        self.assertIs(page.stack.currentWidget(), page.sleeping)
+        self.assertEqual(page.sleeping.title.text(), "Page A")
+        self.assertTrue(a.state(15, [])["asleep"])
+        page.push()                                                         # the bar draws with no page about
+        page.on_back()
+        page.on_stop()
+        page.zoom(1)
+        page.on_media({"id": a.id})
+        self.assertIsNone(a.web)
+        page._save()                                                        # and it's saved as it was
+        self.assertEqual([t["url"] for t in self.saved["tabs"]], self.pages)
+        self.assertEqual(self.saved["active"], 0)
+
+    def test_the_asleep_tab_wakes_from_its_button_a_click_reload_or_an_address(self):
+        self.saved["tabs"] = [{"url": self.pages[0], "title": "Page A"}]
+        for wake in ("button", "click", "reload", "address"):
+            with self.subTest(wake):
+                page = self.browser()
+                tab = page.active
+                self.assertIsNone(tab.web)
+                if wake == "button":
+                    page.sleeping.button.click()
+                elif wake == "click":
+                    page.on_select({"id": tab.id})
+                elif wake == "reload":
+                    page.on_reload()
+                else:
+                    page.on_go({"text": self.pages[1]})
+                self.assertIsNotNone(tab.web)
+                self.assertIs(page.stack.currentWidget(), tab.web)
+                self.until(lambda: tab.title == ("Page B" if wake == "address" else "Page A") and not tab.loading)
+
+    def test_a_new_tab_page_is_drawn_at_once(self):
+        page = self.browser()                                               # nothing saved: one new tab
+        self.assertIsNotNone(page.active.web)
+        self.assertIs(page.stack.currentWidget(), page.active.web)
 
     def test_the_address_bar_and_closing(self):
         page = self.browser()
@@ -425,8 +472,23 @@ class BrowserTests(unittest.TestCase):
         tab._ground()
         self.assertEqual(tab.page.backgroundColor().name(), "#ffffff")
         page.on_go({"text": self.pages[1]})
-        self.until(lambda: page.active.title == "Page B")
+        self.until(lambda: page.active.title == "Page B" and not page.active.loading)
         self.assertEqual(page.active.page.backgroundColor().name(), "#ffffff")
+
+    def test_a_loading_page_shows_the_themes_colour_not_white(self):
+        """Opened, reloaded or woken: until the site has loaded, the theme's
+        colour - a dark theme isn't lit up white between pages."""
+        surface = self.host.theme_tokens()["surface"].lower()
+        page = self.browser()
+        tab = page.open_tab(self.pages[0])
+        self.assertEqual(tab.page.backgroundColor().name(), surface)           # made, about to load
+        self.until(lambda: not tab.loading and tab.title == "Page A")
+        self.assertEqual(tab.page.backgroundColor().name(), "#ffffff")         # loaded: the site's white
+        tab.loading = True                                                     # as loadStarted leaves it
+        tab._ground()
+        self.assertEqual(tab.page.backgroundColor().name(), surface)
+        tab.page.loadFinished.emit(True)                                       # done again: white
+        self.assertEqual(tab.page.backgroundColor().name(), "#ffffff")
 
     def test_new_tabs_always_join_the_right_hand_end(self):
         page = self.browser()

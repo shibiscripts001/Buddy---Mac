@@ -53,6 +53,13 @@ from Python.
   only for now - on a Mac it's a placeholder until it's been run there.
 - **Command Center** - new: a main tab of its own. Run buttons for markers, jumping between them, copying the timecode or the frame, clip colours, Animation presets, saving a timeline version and removing gaps (experimental). System-wide hot keys for them are Windows-only so far; a Mac version needs its own (macOS asks for permission).
   It will hold hot key combos that run Buddy's actions.
+- **Essentials** - new: a main tab of everyday helpers - a calculator that
+  also does timecode, data rate, aspect ratio, a countdown timer, notes kept
+  per project and a world clock.
+- **Games** - new: a main tab of small games for a break - Pong, Snake,
+  Minesweeper, Solitaire, Falling blocks, 2048, Breakout and Sudoku. Each
+  pauses itself when you look away and keeps its best scores. Never touches
+  your project.
 - **Buddy Network** - an anonymous chat between Buddy users.
 
 The sidebar can be reordered and tools hidden from Settings.
